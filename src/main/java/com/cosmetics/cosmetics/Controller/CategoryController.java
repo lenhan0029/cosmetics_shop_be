@@ -13,30 +13,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cosmetics.cosmetics.Service.BrandService;
+import com.cosmetics.cosmetics.Service.CategoryService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @EnableAutoConfiguration
 @RestController
-@RequestMapping("/brand")
-public class BrandController {
+@RequestMapping("/category")
+public class CategoryController {
 
 	@Autowired
-	BrandService brandService;
+	CategoryService categoryService;
+	
 	@GetMapping
-	public ResponseEntity<?> getAlLBrand(){
-		return brandService.getAll();
+	public ResponseEntity<?> getListCategory(){
+		return categoryService.getAll();
 	}
+	
 	@PostMapping
-	public ResponseEntity<?> createBrand(@RequestBody String brandName){
-		return brandService.createBrand(brandName);
+	public ResponseEntity<?> createCategory(@RequestBody String categoryName){
+		return categoryService.createCategory(categoryName);
 	}
+	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateBrand(@PathVariable("id") int id,@RequestBody String brandName){
-		return brandService.updateBrand(id, brandName);
+	public ResponseEntity<?> updateCategory(@PathVariable("id") int id,@RequestBody String categoryName){
+		return categoryService.updateCategory(id, categoryName);
 	}
+	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteBrand(@PathVariable("id") int id){
-		return brandService.deleteBrand(id);
+		return categoryService.deleteCategory(id);
 	}
 }
