@@ -11,32 +11,39 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cosmetics.cosmetics.Service.BrandService;
+import com.cosmetics.cosmetics.Model.DTO.Request.TypeRequest;
+import com.cosmetics.cosmetics.Service.TypeService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @EnableAutoConfiguration
 @RestController
-@RequestMapping("/brand")
-public class BrandController {
-
+@RequestMapping("/type")
+public class TypeController {
+	
 	@Autowired
-	BrandService brandService;
+	TypeService typeService;
+	
 	@GetMapping
-	public ResponseEntity<?> getAlLBrand(){
-		return brandService.getAll();
+	public ResponseEntity<?> getByCategory(@RequestParam("idCategory") int idCategory){
+		return typeService.getTypeByCategory(idCategory);
 	}
+	
 	@PostMapping
-	public ResponseEntity<?> createBrand(@RequestBody String brandName){
-		return brandService.createBrand(brandName);
+	public ResponseEntity<?> createType(@RequestBody TypeRequest dto){
+		return typeService.createType(dto);
 	}
+	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateBrand(@PathVariable("id") int id,@RequestBody String brandName){
-		return brandService.updateBrand(id, brandName);
+	public ResponseEntity<?> updateType(@PathVariable("id") int id, @RequestBody TypeRequest dto){
+		return typeService.updateType(id, dto);
 	}
+	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteBrand(@PathVariable("id") int id){
-		return brandService.deleteBrand(id);
+	public ResponseEntity<?> deleteType(@PathVariable("id") int id){
+		return typeService.deleteType(id);
 	}
+
 }

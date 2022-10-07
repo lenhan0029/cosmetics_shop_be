@@ -28,7 +28,7 @@ public class BrandServiceImpl implements BrandService{
 	}
 
 	@Override
-	public ResponseEntity<Brand> createBrand(String brandName) {
+	public ResponseEntity<?> createBrand(String brandName) {
 		// TODO Auto-generated method stub
 		if(brandRepository.findByName(brandName.toLowerCase()).isPresent()) {
 			throw new ResourceAlreadyExistException("Brand đã tồn tại");
@@ -48,6 +48,21 @@ public class BrandServiceImpl implements BrandService{
 		}
 		brandRepository.deleteById(id);
 		return ResponseEntity.ok("delete success");
+	}
+
+	@Override
+	public ResponseEntity<?> updateBrand(int id, String brandName) {
+		if(brandRepository.findById(id).isEmpty()) {
+			throw new ResourceNotFoundException("Brand không tồn tại");
+		}
+		Brand newBrand = brandRepository.findById(id).get();
+		newBrand.setName(brandName);
+		return ResponseEntity.ok(brandRepository.save(newBrand));
+	}
+
+	@Override
+	public ResponseEntity<?> getAll() {
+		return ResponseEntity.ok(brandRepository.findAll());
 	}
 
 

@@ -6,7 +6,11 @@ import com.cosmetics.cosmetics.Model.Entity.Brand;
 
 public interface BrandService {
 
-	ResponseEntity<Brand> createBrand(String brandName);  
+	ResponseEntity<?> createBrand(String brandName);  
+	
+	ResponseEntity<?> updateBrand(int id,String brandName); 
 	
 	ResponseEntity<?> deleteBrand(Integer id); 
+	
+	ResponseEntity<?> getAll(); 
 }
