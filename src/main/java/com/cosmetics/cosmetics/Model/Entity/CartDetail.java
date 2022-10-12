@@ -38,7 +38,6 @@ public class CartDetail {
 	private Product product;
 	
 	@Column(name = "quantity")
-    @NotEmpty(message = "cannot generate quantity")
     private Integer quantity;
 	
 	

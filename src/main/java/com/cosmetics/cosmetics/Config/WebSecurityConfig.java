@@ -74,7 +74,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/auth/**", "/api/public/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
             .antMatchers(HttpMethod.GET,"brand/**").permitAll()
             .antMatchers(HttpMethod.POST,"brand/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.PUT,"brand/**").hasAuthority("admin")
             .antMatchers(HttpMethod.DELETE,"brand/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.POST,"cartdetail/**").hasAuthority("admin")
         	.anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
