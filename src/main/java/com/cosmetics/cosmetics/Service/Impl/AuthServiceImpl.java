@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
 import com.cosmetics.cosmetics.Model.DTO.Request.LoginRequest;
 import com.cosmetics.cosmetics.Model.DTO.Request.SignupRequest;
 import com.cosmetics.cosmetics.Model.DTO.Response.LoginResponse;
+import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;
 import com.cosmetics.cosmetics.Model.Entity.Role;
 import com.cosmetics.cosmetics.Model.Entity.UserInformation;
@@ -70,21 +72,24 @@ public class AuthServiceImpl implements AuthService{
 		accountRepository.save(newAccount);
 		UserInformation newUserInformation = modelMapper.map(dto, UserInformation.class);
 		newUserInformation.setAccount(newAccount);
-		return ResponseEntity.ok().body("Signup successfull");
+		return ResponseEntity.ok(new ResponseModel("Signup successfull",200));
 	}
 
 	@Override
-	public ResponseEntity<LoginResponse> login(LoginRequest dto) {
+	public ResponseEntity<?> login(LoginRequest dto) {
 		// TODO Auto-generated method stub
 		Optional<Account> optional = accountRepository.findByUserName(dto.getUsername());
-		if(!optional.isPresent()) {
-			throw new ResourceNotFoundException("Username or password is incorrect. Please try again");
+		if(optional.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Account does not exist",404,dto));
 		}
 		if(!optional.get().isStatus()== true) {
-			throw new ResourceNotFoundException("Account is disable can not Login .");
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseModel(
+					"Account is disable can not Login",401));
 		}
 		if(!BCrypt.checkpw(dto.getPassword(),optional.get().getPassword())){
-			throw new ResourceNotFoundException("Username or password is incorrect. Please try again");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Password is incorrect",404,dto));
 		}
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
@@ -93,7 +98,7 @@ public class AuthServiceImpl implements AuthService{
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-		return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles.get(0), userDetails.isStatus()));
+		return ResponseEntity.ok(new ResponseModel("login success",200,new LoginResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles.get(0), userDetails.isStatus())));
 		
 	}
 

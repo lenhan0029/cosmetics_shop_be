@@ -3,6 +3,7 @@ package com.cosmetics.cosmetics.Service.Impl;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import com.cosmetics.cosmetics.Exception.ResourceAlreadyExistException;
 import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
@@ -14,6 +15,7 @@ import com.cosmetics.cosmetics.Repository.ProductRepository;
 import com.cosmetics.cosmetics.Repository.TypeRepository;
 import com.cosmetics.cosmetics.Service.TypeService;
 
+@Service
 public class TypeServiceImpl implements TypeService{
 
 	final TypeRepository typeRepository;

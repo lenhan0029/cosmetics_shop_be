@@ -1,6 +1,7 @@
 package com.cosmetics.cosmetics.Service.Impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -31,11 +32,12 @@ public class BrandServiceImpl implements BrandService{
 	public ResponseEntity<?> createBrand(String brandName) {
 		// TODO Auto-generated method stub
 		if(brandRepository.findByName(brandName.toLowerCase()).isPresent()) {
-			throw new ResourceAlreadyExistException("Brand đã tồn tại");
+//			throw new ResourceAlreadyExistException("Brand đã tồn tại");
+			return ResponseEntity.badRequest().body("brand đã tồn tại");
 		}
 		Brand newBrand = new Brand();
 		newBrand.setName(brandName);
-		return ResponseEntity.ok(brandRepository.save(newBrand));
+		return ResponseEntity.ok().body(brandRepository.save(newBrand));
 	}
 
 	@Override
@@ -62,7 +64,7 @@ public class BrandServiceImpl implements BrandService{
 
 	@Override
 	public ResponseEntity<?> getAll() {
-		return ResponseEntity.ok(brandRepository.findAll());
+		return ResponseEntity.status(HttpStatus.OK.value()).body(brandRepository.findAll());
 	}
 
 
