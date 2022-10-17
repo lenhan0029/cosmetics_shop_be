@@ -40,7 +40,7 @@ public class UserDetailsImpl implements UserDetails {
     	
     	Collection<? extends GrantedAuthority> authorities = Collections
     			.singleton(new SimpleGrantedAuthority(account.getRole().getName()));
-
+    	
         return new UserDetailsImpl(
         		account.getId(),        	
         		account.getUserName(),
