@@ -84,8 +84,8 @@ public class AuthServiceImpl implements AuthService{
 					"Account does not exist",404,dto));
 		}
 		if(!optional.get().isStatus()== true) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ResponseModel(
-					"Account is disable can not Login",401));
+			return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel(
+					"Account is disable can not Login",200));
 		}
 		if(!BCrypt.checkpw(dto.getPassword(),optional.get().getPassword())){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(

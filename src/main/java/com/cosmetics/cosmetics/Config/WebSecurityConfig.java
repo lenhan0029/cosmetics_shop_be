@@ -1,4 +1,4 @@
-package com.cosmetics.cosmetics.Config;
+ package com.cosmetics.cosmetics.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +25,6 @@ import com.cosmetics.cosmetics.Security.Service.UserDetailsServiceImpl;
     // securedEnabled = true,
     // jsr250Enabled = true,
     prePostEnabled = true)
-
-
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
@@ -67,16 +65,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+    	System.out.println(userDetailsService.toString() + "+++++++++++++++++++++++++");
         http.cors().and().csrf().disable()
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
             .antMatchers("/auth/**", "/api/public/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-            .antMatchers(HttpMethod.GET,"brand/**").permitAll()
-            .antMatchers(HttpMethod.POST,"brand/**").hasAuthority("admin")
-            .antMatchers(HttpMethod.PUT,"brand/**").hasAuthority("admin")
-            .antMatchers(HttpMethod.DELETE,"brand/**").hasAuthority("admin")
-            .antMatchers(HttpMethod.POST,"cartdetail/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.GET,"/brand").hasAuthority("member")
+            .antMatchers(HttpMethod.POST,"/brand/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.PUT,"/brand/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.DELETE,"/brand/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.POST,"/cartdetail/**").hasAuthority("admin")
         	.anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

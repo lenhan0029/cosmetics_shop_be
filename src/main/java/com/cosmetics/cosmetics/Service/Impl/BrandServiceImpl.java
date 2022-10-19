@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.cosmetics.cosmetics.Exception.ResourceAlreadyExistException;
 import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
+import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Brand;
 import com.cosmetics.cosmetics.Repository.BrandRepository;
 import com.cosmetics.cosmetics.Repository.ProductRepository;
@@ -37,7 +38,7 @@ public class BrandServiceImpl implements BrandService{
 		}
 		Brand newBrand = new Brand();
 		newBrand.setName(brandName);
-		return ResponseEntity.ok().body(brandRepository.save(newBrand));
+		return ResponseEntity.ok(new ResponseModel("Thêm thành công",200,brandRepository.save(newBrand)));
 	}
 
 	@Override
@@ -64,7 +65,7 @@ public class BrandServiceImpl implements BrandService{
 
 	@Override
 	public ResponseEntity<?> getAll() {
-		return ResponseEntity.status(HttpStatus.OK.value()).body(brandRepository.findAll());
+		return ResponseEntity.ok(new ResponseModel("thành công",200,brandRepository.findAll()));
 	}
 
 
