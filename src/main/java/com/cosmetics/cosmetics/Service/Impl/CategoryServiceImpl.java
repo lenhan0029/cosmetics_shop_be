@@ -1,9 +1,11 @@
 package com.cosmetics.cosmetics.Service.Impl;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.cosmetics.cosmetics.Exception.ResourceAlreadyExistException;
+import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Category;
 import com.cosmetics.cosmetics.Repository.CategoryRepository;
 import com.cosmetics.cosmetics.Repository.TypeRepository;
@@ -25,41 +27,41 @@ public class CategoryServiceImpl implements CategoryService{
 	public ResponseEntity<?> createCategory(String CategoryName) {
 		// TODO Auto-generated method stub
 		if(categoryRepository.findByName(CategoryName.toLowerCase()).isPresent()) {
-			throw new ResourceAlreadyExistException("Category đã tồn tại");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("danh mục không tồn tại",404,CategoryName));
 		}
 		Category newCategory = new Category();
 		newCategory.setName(CategoryName);
-		return ResponseEntity.ok(categoryRepository.save(newCategory));
+		return ResponseEntity.ok(new ResponseModel("tạo thành công",200,categoryRepository.save(newCategory)));
 	}
 
 	@Override
 	public ResponseEntity<?> updateCategory(int id, String CategoryName) {
 		// TODO Auto-generated method stub
 		if(categoryRepository.findById(id).isEmpty()) {
-			throw new ResourceAlreadyExistException("Category không tồn tại");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("danh mục không tồn tại",404,CategoryName));
 		}
 		Category newCategory = categoryRepository.findById(id).get();
 		newCategory.setName(CategoryName);
-		return ResponseEntity.ok(categoryRepository.save(newCategory));
+		return ResponseEntity.ok(new ResponseModel("tạo thành công",200,categoryRepository.save(newCategory)));
 	}
 
 	@Override
 	public ResponseEntity<?> deleteCategory(int id) {
 		// TODO Auto-generated method stub
 		if(categoryRepository.findById(id).isEmpty()) {
-			throw new ResourceAlreadyExistException("Category không tồn tại");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("danh mục không tồn tại",404,id));
 		}
-		if(typeRepository.findByCategory(categoryRepository.findById(id).get()).isPresent()) {
-			throw new ResourceAlreadyExistException("Không thể xóa category chứa type");
+		if(!typeRepository.findByCategory(categoryRepository.findById(id).get()).isEmpty()) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel("Không thể xóa danh mục chứa loại sản phẩm",409,id));
 		}
 		categoryRepository.deleteById(id);
-		return ResponseEntity.ok("delete success");
+		return ResponseEntity.ok(new ResponseModel("xóa thành công",200,id));
 	}
 
 	@Override
 	public ResponseEntity<?> getAll() {
 		// TODO Auto-generated method stub
-		return ResponseEntity.ok(categoryRepository.findAll());
+		return ResponseEntity.ok(new ResponseModel("thành công",200,categoryRepository.findAll()));
 	}
 
 }

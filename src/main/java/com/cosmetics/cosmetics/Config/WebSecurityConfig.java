@@ -71,10 +71,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
             .antMatchers("/auth/**", "/api/public/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-            .antMatchers(HttpMethod.GET,"/brand").hasAuthority("member")
-            .antMatchers(HttpMethod.POST,"/brand/**").hasAuthority("admin")
-            .antMatchers(HttpMethod.PUT,"/brand/**").hasAuthority("admin")
-            .antMatchers(HttpMethod.DELETE,"/brand/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.GET,"/brand/**","/type/**","/category/**").permitAll()
+            .antMatchers(HttpMethod.POST,"/brand/**","/type/**","/category/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.PUT,"/brand/**","/type/**","/category/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.DELETE,"/brand/**","/type/**","/category/**").hasAuthority("admin")
             .antMatchers(HttpMethod.POST,"/cartdetail/**").hasAuthority("admin")
         	.anyRequest().authenticated();
 
