@@ -31,10 +31,8 @@ public class BrandServiceImpl implements BrandService{
 
 	@Override
 	public ResponseEntity<?> createBrand(String brandName) {
-		// TODO Auto-generated method stub
 		if(brandRepository.findByName(brandName.toLowerCase()).isPresent()) {
-//			throw new ResourceAlreadyExistException("Brand đã tồn tại");
-			return ResponseEntity.badRequest().body("brand đã tồn tại");
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel("thương hiệu đã tồn tại",409,brandName));
 		}
 		Brand newBrand = new Brand();
 		newBrand.setName(brandName);
@@ -44,23 +42,23 @@ public class BrandServiceImpl implements BrandService{
 	@Override
 	public ResponseEntity<?> deleteBrand(Integer id) {
 		if(brandRepository.findById(id).isEmpty()) {
-			throw new ResourceNotFoundException("Brand không tồn tại");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("thương hiệu không tồn tại",404,id));
 		}
 		if(productRepository.findByBrand(brandRepository.findById(id).get()).isPresent()) {
-			throw new ResourceAlreadyExistException("Không thể xóa brand có sản phẩm");
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel("Không thể xóa thương hiệu có sản phẩm",409,id));
 		}
 		brandRepository.deleteById(id);
-		return ResponseEntity.ok("delete success");
+		return ResponseEntity.ok(new ResponseModel("xóa thành công",200));
 	}
 
 	@Override
 	public ResponseEntity<?> updateBrand(int id, String brandName) {
 		if(brandRepository.findById(id).isEmpty()) {
-			throw new ResourceNotFoundException("Brand không tồn tại");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("thương hiệu không tồn tại",404,id));
 		}
 		Brand newBrand = brandRepository.findById(id).get();
 		newBrand.setName(brandName);
-		return ResponseEntity.ok(brandRepository.save(newBrand));
+		return ResponseEntity.ok(new ResponseModel("thay đổi thành công",200,brandRepository.save(newBrand)));
 	}
 
 	@Override
