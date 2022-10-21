@@ -48,7 +48,10 @@ public class UserInformation {
 	@Column(name = "email")
     private String email;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@Column(name = "image")
+    private String image;
+	
+	@OneToOne(mappedBy = "userInformation",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_account", referencedColumnName = "id")
 	private Account account;
 }

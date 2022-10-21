@@ -30,11 +30,15 @@ public class Account {
     @Column(name = "status")
     private boolean status;
 
+    @Column(name = "otp")
+    private String otp;
+    
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_role", referencedColumnName = "id")
 	private Role role;
     
-    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_information", referencedColumnName = "id")
     private UserInformation userInformation;
     
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
