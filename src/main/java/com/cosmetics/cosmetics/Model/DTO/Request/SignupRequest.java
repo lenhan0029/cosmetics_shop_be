@@ -21,10 +21,11 @@ public class SignupRequest {
 	private String firstName;
 	@NotEmpty
 	private String LastName;
-	@NotEmpty
+	
 	private String address;
-	@NotEmpty
+	
 	private String phoneNumber;
 	@NotEmpty
 	private String email;
+	private String image;
 }

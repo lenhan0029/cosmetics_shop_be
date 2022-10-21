@@ -46,13 +46,9 @@ public class Product {
     @NotEmpty(message = "cannot generate price")
     private Integer price;
 	
-	@Column(name = "quantity_usable")
-    @NotEmpty(message = "cannot generate quantity usable")
-    private Integer quantityUsable;
-	
-	@Column(name = "quantity_unusable")
-    @NotEmpty(message = "cannot generate quantity unusable")
-    private Integer quantityUnusable;
+	@Column(name = "quantity")
+    @NotEmpty(message = "cannot generate quantity")
+    private Integer quantity;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_brand")
