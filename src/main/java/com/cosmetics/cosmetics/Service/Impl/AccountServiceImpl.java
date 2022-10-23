@@ -34,7 +34,7 @@ public class AccountServiceImpl implements AccountService{
 	public ResponseEntity<?> ChangePassword(Integer id, ChangePasswordRequest dto) {
 		// TODO Auto-generated method stub
 		Optional<Account> account = accountRepository.findById(id);
-		if(account.isEmpty()) {
+		if(!account.isPresent()) {
 			throw new ResourceNotFoundException("Account không tồn tại");
 		}
 		String encryptPassword = encoder.encode(dto.getOldPassword());
@@ -56,12 +56,12 @@ public class AccountServiceImpl implements AccountService{
 	public ResponseEntity<?> editAccount(Integer id, EditAccountRequest dto) {
 		// TODO Auto-generated method stub
 		Optional<Account> account = accountRepository.findById(id);
-		if(account.isEmpty()) {
+		if(!account.isPresent()) {
 			throw new ResourceNotFoundException("Account không tồn tại");
 		}
 		Account newAccount = account.get();
 		Optional<Role> role = roleRepository.findById(dto.getRoleId());
-		if(role.isEmpty()) {
+		if(!role.isPresent()) {
 			throw new ResourceNotFoundException("role không tồn tại");
 		}
 		newAccount.setRole(role.get());

@@ -14,7 +14,7 @@
 	<name>lenhan</name>
 	<description>Website for business selling cosmetics</description>
 	<properties>
-		<java.version>18</java.version>
+		<!--<java.version>18</java.version>-->
 		<repackage.classifier/>
 		<spring-native.version>0.12.1</spring-native.version>
 		<spring-security.version>5.4.0</spring-security.version>

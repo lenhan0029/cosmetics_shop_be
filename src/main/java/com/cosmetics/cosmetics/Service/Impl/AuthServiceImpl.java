@@ -108,7 +108,7 @@ public class AuthServiceImpl implements AuthService{
 	public ResponseEntity<?> login(LoginRequest dto) {
 		// TODO Auto-generated method stub
 		Optional<Account> optional = accountRepository.findByUserName(dto.getUsername());
-		if(optional.isEmpty()) {
+		if(!optional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
 					"Account does not exist",404,dto));
 		}

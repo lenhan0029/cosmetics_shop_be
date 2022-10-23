@@ -41,7 +41,7 @@ public class BrandServiceImpl implements BrandService{
 
 	@Override
 	public ResponseEntity<?> deleteBrand(Integer id) {
-		if(brandRepository.findById(id).isEmpty()) {
+		if(!brandRepository.findById(id).isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("thương hiệu không tồn tại",404,id));
 		}
 		if(productRepository.findByBrand(brandRepository.findById(id).get()).isPresent()) {
@@ -53,7 +53,7 @@ public class BrandServiceImpl implements BrandService{
 
 	@Override
 	public ResponseEntity<?> updateBrand(int id, String brandName) {
-		if(brandRepository.findById(id).isEmpty()) {
+		if(!brandRepository.findById(id).isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("thương hiệu không tồn tại",404,id));
 		}
 		Brand newBrand = brandRepository.findById(id).get();
