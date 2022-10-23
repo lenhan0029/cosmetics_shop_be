@@ -28,7 +28,7 @@ public class CartServiceImpl implements CartService{
 	public ResponseEntity<?> createCart(Integer accountId) {
 		// TODO Auto-generated method stub
 		Optional<Account> account = accountRepository.findById(accountId);
-		if(account.isEmpty()) {
+		if(!account.isPresent()) {
 			throw new ResourceNotFoundException("Account không tồn tại");
 		}
 		Cart cart = new Cart();
