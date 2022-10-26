@@ -71,11 +71,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
             .antMatchers("/auth/**", "/api/public/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-            .antMatchers(HttpMethod.GET,"/brand/**","/type/**","/category/**").permitAll()
-            .antMatchers(HttpMethod.POST,"/brand/**","/type/**","/category/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.GET,"/brand/**","/type/**","/category/**","/product/**").permitAll()
+            .antMatchers(HttpMethod.POST,"/brand/**","/type/**","/category/**","/product/**").hasAuthority("admin")
             .antMatchers(HttpMethod.PUT,"/brand/**","/type/**","/category/**").hasAuthority("admin")
             .antMatchers(HttpMethod.DELETE,"/brand/**","/type/**","/category/**").hasAuthority("admin")
-            .antMatchers(HttpMethod.POST,"/cartdetail/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.GET,"/cartdetail/**").hasAuthority("member")
+            .antMatchers(HttpMethod.POST,"/cartdetail/**").hasAuthority("member")
         	.anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

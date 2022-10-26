@@ -2,10 +2,12 @@ package com.cosmetics.cosmetics.Service.Impl;
 
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
+import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;
 import com.cosmetics.cosmetics.Model.Entity.Cart;
 import com.cosmetics.cosmetics.Repository.AccountRepository;
@@ -28,12 +30,14 @@ public class CartServiceImpl implements CartService{
 	public ResponseEntity<?> createCart(Integer accountId) {
 		// TODO Auto-generated method stub
 		Optional<Account> account = accountRepository.findById(accountId);
-		if(!account.isPresent()) {
-			throw new ResourceNotFoundException("Account không tồn tại");
+		if(account.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Không tìm thấy tài khoản",404));
 		}
 		Cart cart = new Cart();
 		cart.setAccount(account.get());
-		return ResponseEntity.ok(cartRepository.save(cart));
+		Cart newCart = cartRepository.save(cart);
+		return ResponseEntity.ok().body(new ResponseModel("Tạo thành công",200,newCart.getId()));
 	}
 
 	

@@ -6,7 +6,7 @@ import com.cosmetics.cosmetics.Model.DTO.Request.AddToCartRequest;
 
 public interface CartDetailService {
 
-	ResponseEntity<?> addToCart(AddToCartRequest dto);
+	ResponseEntity<?> addToCart(int accountId,AddToCartRequest dto);
 	
 	ResponseEntity<?> editCartItem(AddToCartRequest dto);
 	
@@ -15,4 +15,6 @@ public interface CartDetailService {
 	ResponseEntity<?> deleteCartItem(Integer cartId, Integer productId);
 	
 	ResponseEntity<?> deleteAllCartItems(Integer cartId);
+	
+	ResponseEntity<?> test(int cartid, int productid);
 }
