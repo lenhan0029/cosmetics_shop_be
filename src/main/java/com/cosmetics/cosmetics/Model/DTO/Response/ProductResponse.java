@@ -1,6 +1,7 @@
 package com.cosmetics.cosmetics.Model.DTO.Response;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,13 +10,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItemResponse {
+@Data
+public class ProductResponse {
 
-	private int cartId;
-	private int productId;
+	private int id;
 	private String name;
 	private String image;
 	private int price;
-	private int quantity;
-	
+	private int rate;
 }

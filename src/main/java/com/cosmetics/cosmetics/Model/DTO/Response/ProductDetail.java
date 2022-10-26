@@ -9,13 +9,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItemResponse {
+public class ProductDetail {
 
-	private int cartId;
-	private int productId;
+	private int id;
 	private String name;
 	private String image;
 	private int price;
+	private int rate;
 	private int quantity;
+	private String description;
 	
 }

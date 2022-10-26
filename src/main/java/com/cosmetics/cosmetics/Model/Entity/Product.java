@@ -43,12 +43,16 @@ public class Product {
     private String image;
 	
 	@Column(name = "price")
-    @NotEmpty(message = "cannot generate price")
     private Integer price;
 	
 	@Column(name = "quantity")
-    @NotEmpty(message = "cannot generate quantity")
     private Integer quantity;
+	
+	@Column(name = "description")
+    private String description;
+	
+	@Column(name = "star")
+    private Integer star;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_brand")
