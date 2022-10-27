@@ -27,5 +27,5 @@ public interface CartDetailRepository extends JpaRepository<CartDetail, CartKey>
 	@Modifying
 	@Query(value = "INSERT INTO cart_detail VALUES (:cartId, :productId, :quantity)", nativeQuery = true)
 	@Transactional
-	void addToCart(@Param("cartId") int cartId, @Param("productId") int productId,@Param("quantity") int quantity);
+	int addToCart(@Param("cartId") int cartId, @Param("productId") int productId,@Param("quantity") int quantity);
 }

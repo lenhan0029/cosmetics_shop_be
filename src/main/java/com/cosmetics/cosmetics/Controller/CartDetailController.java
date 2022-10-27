@@ -24,10 +24,11 @@ public class CartDetailController {
 	@Autowired
 	private CartDetailService cartDetailService;
 	
-	@PostMapping("/{id}")
-	private ResponseEntity<?> addToCart(@PathVariable("id") int id
+	@PostMapping
+	private ResponseEntity<?> addToCart(@RequestParam(name = "account",defaultValue = "0", required = true) String account
 			,@RequestBody AddToCartRequest dto){
-		return cartDetailService.addToCart(id,dto);
+		int accountConverted = Integer.parseInt(account);
+		return cartDetailService.addToCart(accountConverted,dto.getProductId(),dto.getQuantity());
 	}
 	@GetMapping
 	private ResponseEntity<?> test(
