@@ -6,7 +6,7 @@ import com.cosmetics.cosmetics.Model.DTO.Request.AddToCartRequest;
 
 public interface CartDetailService {
 
-	ResponseEntity<?> addToCart(int accountId,AddToCartRequest dto);
+	ResponseEntity<?> addToCart(int accountId,int productId, int quantity);
 	
 	ResponseEntity<?> editCartItem(AddToCartRequest dto);
 	

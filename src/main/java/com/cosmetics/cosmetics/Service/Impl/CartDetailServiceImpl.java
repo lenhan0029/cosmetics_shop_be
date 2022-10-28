@@ -38,7 +38,7 @@ public class CartDetailServiceImpl implements CartDetailService{
 	}
 
 	@Override
-	public ResponseEntity<?> addToCart(int accountId, AddToCartRequest dto) {
+	public ResponseEntity<?> addToCart(int accountId, int productId, int quantity) {
 		Optional<Account> acc = accountRepository.findById(accountId);
 		if(acc.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -46,37 +46,34 @@ public class CartDetailServiceImpl implements CartDetailService{
 		}
 		Cart entity;
 		Optional<Cart> cart = cartRepository.findByAccount(acc.get());
-		CartDetail cartDetail = cartDetailRepository.findByCartAndProduct(accountId, dto.getProductId()).get();
-		int productId = dto.getProductId();
-		if(!cartDetailRepository.findByCartAndProduct(accountId, productId).isEmpty()) {
-//			CartDetail cartDetail = cartDetailRepository.findByCartAndProduct(accountId, dto.getProductId()).get();
-//			cartDetail.setQuantity(dto.getQuantity());
-//			CartDetail newcd = cartDetailRepository.save(cartDetail);
-			return ResponseEntity.ok().body(
-					new ResponseModel("Thêm thành công",200));
+//		CartDetail cartDetail = cartDetailRepository.findByCartAndProduct(accountId, productId).get();
+		
+		if(cart.isEmpty()) {
+			Cart newCart = new Cart();
+			newCart.setAccount(acc.get());
+			entity = cartRepository.save(newCart);
+		}else {
+			if(cartDetailRepository.findByCartAndProduct(cart.get().getId(), productId).isPresent()) {
+				CartDetail cartDetail = cartDetailRepository.findByCartAndProduct(cart.get().getId(), productId).get();
+				cartDetail.setQuantity(cartDetail.getQuantity() + quantity);
+				CartDetail newcd = cartDetailRepository.saveAndFlush(cartDetail);
+				return ResponseEntity.ok().body(
+						new ResponseModel("Thêm thành công",200,newcd.getQuantity()));
+			}
+			entity = cart.get();
 		}
-//		if(cart.isEmpty()) {
-//			entity = new Cart();
-//			entity.setAccount(acc.get());
-//			Cart newCart = cartRepository.save(entity);
-//		}else {
-//			entity = cart.get();
-//		}
-//		Optional<Product> protp = productRepository.findById(dto.getProductId());
-//		if(protp.isEmpty()) {
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-//					new ResponseModel("Sản phẩm không tồn tại",404));
-//		}
-//		CartDetail cartDetail = new CartDetail();
-//		cartDetail.setCart(entity);
-//		cartDetail.setProduct(protp.get());
-//		cartDetail.setQuantity(dto.getQuantity());
-//		cartDetailRepository.addToCart(dto.getCartId(),dto.getProductId(),dto.getQuantity());
-//		CartDetail newItem = cartDetailRepository.saveAndFlush(cartDetail);
-//		CartItemResponse res = new CartItemResponse(entity.getId(),protp.get().getId(),protp.get().getName(),
-//				protp.get().getImage(),protp.get().getPrice(),newItem.getQuantity());
+		Optional<Product> protp = productRepository.findById(productId);
+		if(protp.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Sản phẩm không tồn tại",404));
+		}
+		int b = cartDetailRepository.addToCart(entity.getId(),productId,quantity);
+		if(b != 0) {
+			return ResponseEntity.ok().body(
+					new ResponseModel("Thêm thành công 2",200));
+		}
 		return ResponseEntity.ok().body(
-				new ResponseModel("Thêm thành công 2",200,cartDetail.getQuantity()));
+				new ResponseModel("Thêm thất bại",500));
 	}
 
 	@Override
