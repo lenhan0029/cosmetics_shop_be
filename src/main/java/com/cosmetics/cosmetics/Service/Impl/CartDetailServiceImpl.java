@@ -175,7 +175,7 @@ public class CartDetailServiceImpl implements CartDetailService{
 		Optional<CartDetail> cd = cartDetailRepository.findByCartAndProduct(cartid, productid);
 //		Optional<CartDetail> cd = cartDetailRepository.findByCartAndProduct();
 		return ResponseEntity.ok().body(
-				new ResponseModel("thành công",200,cd.get().getQuantity()));
+				new ResponseModel("Thành công",200,cd.get().getQuantity()));
 	}
 
 }
