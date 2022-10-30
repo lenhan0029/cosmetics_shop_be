@@ -32,7 +32,7 @@ public class BrandServiceImpl implements BrandService{
 	@Override
 	public ResponseEntity<?> createBrand(String brandName) {
 		if(brandRepository.findByName(brandName.toLowerCase()).isPresent()) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel("thương hiệu đã tồn tại",409,brandName));
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel("Thương hiệu đã tồn tại",409,brandName));
 		}
 		Brand newBrand = new Brand();
 		newBrand.setName(brandName);
@@ -42,28 +42,28 @@ public class BrandServiceImpl implements BrandService{
 	@Override
 	public ResponseEntity<?> deleteBrand(Integer id) {
 		if(!brandRepository.findById(id).isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("thương hiệu không tồn tại",404,id));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Thương hiệu không tồn tại",404,id));
 		}
 		if(productRepository.findByBrand(brandRepository.findById(id).get()).isPresent()) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel("Không thể xóa thương hiệu có sản phẩm",409,id));
 		}
 		brandRepository.deleteById(id);
-		return ResponseEntity.ok(new ResponseModel("xóa thành công",200));
+		return ResponseEntity.ok(new ResponseModel("Xóa thành công",200));
 	}
 
 	@Override
 	public ResponseEntity<?> updateBrand(int id, String brandName) {
 		if(!brandRepository.findById(id).isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("thương hiệu không tồn tại",404,id));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Thương hiệu không tồn tại",404,id));
 		}
 		Brand newBrand = brandRepository.findById(id).get();
 		newBrand.setName(brandName);
-		return ResponseEntity.ok(new ResponseModel("thay đổi thành công",200,brandRepository.save(newBrand)));
+		return ResponseEntity.ok(new ResponseModel("Thay đổi thành công",200,brandRepository.save(newBrand)));
 	}
 
 	@Override
 	public ResponseEntity<?> getAll() {
-		return ResponseEntity.ok(new ResponseModel("thành công",200,brandRepository.findAll()));
+		return ResponseEntity.ok(new ResponseModel("Thành công",200,brandRepository.findAll()));
 	}
 
 
