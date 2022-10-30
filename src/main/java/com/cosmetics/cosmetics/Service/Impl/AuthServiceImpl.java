@@ -71,6 +71,11 @@ public class AuthServiceImpl implements AuthService{
 	@Override
 	public ResponseEntity<?> signup(SignupRequest dto) {
 		// TODO Auto-generated method stub
+		Optional<Account> optional = accountRepository.findByUserName(dto.getUserName());
+		if(optional.isPresent()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseModel(
+					"Tên đăng nhập đã tồn tại",400,dto));
+		}
 		Account newAccount = modelMapper.map(dto, Account.class);
 		newAccount.setPassword(encoder.encode(dto.getPassword()));
 		if(dto.getStatus() == 1) {
@@ -97,7 +102,7 @@ public class AuthServiceImpl implements AuthService{
 		Account newAcc = accountRepository.save(newAccount);
 		UserInformation newUserInformation = userInformationRepository.save(modelMapper.map(dto, UserInformation.class));
 		newAccount.setUserInformation(newUserInformation);
-		return ResponseEntity.ok(new ResponseModel("Signup successfull",200,newAcc));
+		return ResponseEntity.ok(new ResponseModel("Đăng ký thành công",200,newAcc));
 	}
 
 	private int randomNumber(int min, int max) {
@@ -110,15 +115,15 @@ public class AuthServiceImpl implements AuthService{
 		Optional<Account> optional = accountRepository.findByUserName(dto.getUsername());
 		if(!optional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
-					"Account does not exist",404,dto));
+					"Tài khoản không tồn tại",404,dto));
 		}
 		if(!optional.get().isStatus()== true) {
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel(
-					"Account is disable can not Login",200));
+					"Tài khoản đã bị khóa",200));
 		}
 		if(!BCrypt.checkpw(dto.getPassword(),optional.get().getPassword())){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
-					"Password is incorrect",404,dto));
+					"Mập khẩu không đúng",404,dto));
 		}
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
@@ -127,7 +132,7 @@ public class AuthServiceImpl implements AuthService{
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 		List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-		return ResponseEntity.ok(new ResponseModel("login success",200,new LoginResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles.get(0), userDetails.isStatus())));
+		return ResponseEntity.ok(new ResponseModel("Đăng nhập thành công",200,new LoginResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles.get(0), userDetails.isStatus())));
 		
 	}
 

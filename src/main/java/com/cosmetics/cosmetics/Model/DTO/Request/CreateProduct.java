@@ -18,4 +18,5 @@ public class CreateProduct {
 	private int id_brand;
 	private int id_type;
 	private int id_promotion;
+	private int status;
 }

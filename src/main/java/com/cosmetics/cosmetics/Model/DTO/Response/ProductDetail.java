@@ -18,5 +18,6 @@ public class ProductDetail {
 	private int rate;
 	private int quantity;
 	private String description;
+	private int Status;
 	
 }
