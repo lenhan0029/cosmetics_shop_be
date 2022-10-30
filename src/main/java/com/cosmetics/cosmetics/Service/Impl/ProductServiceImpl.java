@@ -137,7 +137,7 @@ public class ProductServiceImpl implements ProductService{
 	public ResponseEntity<?> createProduct(CreateProduct dto) {
 		Optional<Brand> brand = brandRepository.findById(dto.getId_brand());
 		Optional<Type> type = typeRepository.findById(dto.getId_type());
-//		Optional<Promotion> promotion = promotionRepository.findById(dto.getId_promotion());
+		Optional<Promotion> promotion = promotionRepository.findById(dto.getId_promotion());
 		if(brand.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Thương hiệu không tồn tại",404));
 		}
@@ -150,13 +150,16 @@ public class ProductServiceImpl implements ProductService{
 		product.setPrice(dto.getPrice());
 		product.setQuantity(dto.getQuantity());
 		product.setStar(dto.getRate());
-//		product.setPromotion(promotion.get());
+		if(promotion.isPresent()) {
+			product.setPromotion(promotion.get());
+		}
 		product.setDescription(dto.getDescription());
 		product.setBrand(brand.get());
 		product.setType(type.get());
+		product.setStatus(dto.getStatus());
 		Product newProduct = productRepository.save(product);
 		ProductDetail pr = new ProductDetail(newProduct.getId(), newProduct.getName(), newProduct.getImage(),
-				newProduct.getPrice(), newProduct.getStar(), newProduct.getQuantity(), newProduct.getDescription());
+				newProduct.getPrice(), newProduct.getStar(), newProduct.getQuantity(), newProduct.getDescription(),newProduct.getStatus());
 		return ResponseEntity.ok().body(new ResponseModel("Thành công",200,pr));
 	}
 
@@ -167,10 +170,27 @@ public class ProductServiceImpl implements ProductService{
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
 					new ResponseModel("Không tìm thấy sản phẩm",404));
 		}
+		Optional<Brand> brand = brandRepository.findById(dto.getId_brand());
+		Optional<Type> type = typeRepository.findById(dto.getId_type());
+		Optional<Promotion> promotion = promotionRepository.findById(dto.getId_promotion());
+		if(brand.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Thương hiệu không tồn tại",404));
+		}
+		if(type.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Loại sản phẩm không tồn tại",404));
+		}
+		
 		Product oldProduct = otp.get();
+		oldProduct.setImage(dto.getImage());
+		if(promotion.isPresent()) {
+			oldProduct.setPromotion(promotion.get());
+		}
+		oldProduct.setName(dto.getName());
 		oldProduct.setPrice(dto.getPrice());
 		oldProduct.setQuantity(dto.getQuantity());
 		oldProduct.setStar(dto.getRate());;
+		oldProduct.setDescription(dto.getDescription());
+		oldProduct.setStatus(dto.getStatus());
 		Product product = productRepository.save(oldProduct);
 		ProductDetail prdetail = new ProductDetail();
 		prdetail.setId(product.getId());
@@ -180,6 +200,7 @@ public class ProductServiceImpl implements ProductService{
 		prdetail.setQuantity(product.getQuantity());
 		prdetail.setRate(product.getQuantity());
 		prdetail.setDescription(product.getDescription());
+		prdetail.setStatus(product.getStatus());
 		return ResponseEntity.ok().body(
 				new ResponseModel("Sửa thành công",200,prdetail));
 	}
@@ -191,9 +212,11 @@ public class ProductServiceImpl implements ProductService{
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
 					new ResponseModel("Không tìm thấy sản phẩm",404));
 		}
-		
-		// TODO Auto-generated method stub
-		return null;
+		Product delProduct = otp.get();
+		delProduct.setStatus(0);
+		productRepository.save(delProduct);
+		return ResponseEntity.ok().body(
+				new ResponseModel("Xóa thành công",200));
 	}
 	
 	

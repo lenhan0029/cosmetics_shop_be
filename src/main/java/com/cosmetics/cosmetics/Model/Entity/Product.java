@@ -54,6 +54,9 @@ public class Product {
 	@Column(name = "star")
     private Integer star;
 	
+	@Column(name = "status")
+	private int status;
+	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_brand")
 	private Brand brand;

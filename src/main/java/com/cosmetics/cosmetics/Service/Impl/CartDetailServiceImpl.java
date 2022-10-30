@@ -1,5 +1,7 @@
 package com.cosmetics.cosmetics.Service.Impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -58,7 +60,7 @@ public class CartDetailServiceImpl implements CartDetailService{
 				cartDetail.setQuantity(cartDetail.getQuantity() + quantity);
 				CartDetail newcd = cartDetailRepository.saveAndFlush(cartDetail);
 				return ResponseEntity.ok().body(
-						new ResponseModel("Thêm thành công",200,newcd.getQuantity()));
+						new ResponseModel("Thêm thành công",200));
 			}
 			entity = cart.get();
 		}
@@ -70,32 +72,97 @@ public class CartDetailServiceImpl implements CartDetailService{
 		int b = cartDetailRepository.addToCart(entity.getId(),productId,quantity);
 		if(b != 0) {
 			return ResponseEntity.ok().body(
-					new ResponseModel("Thêm thành công 2",200));
+					new ResponseModel("Thêm thành công",200));
 		}
-		return ResponseEntity.ok().body(
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
 				new ResponseModel("Thêm thất bại",500));
 	}
 
 	@Override
-	public ResponseEntity<?> editCartItem(AddToCartRequest dto) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<?> editCartItem(int accountId, AddToCartRequest dto) {
+		Optional<Account> accOptional = accountRepository.findById(accountId);
+		if(accOptional.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Không tìm thấy tài khoản",404));
+		}
+		Optional<Cart> cart = cartRepository.findByAccount(accOptional.get());
+		if(cart.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Không tìm thấy giỏ hàng",404));
+		}
+		Optional<Product> protp = productRepository.findById(dto.getProductId());
+		if(protp.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Sản phẩm không tồn tại",404));
+		}
+		if(!cartDetailRepository.findByCartAndProduct(cart.get().getId(), dto.getProductId()).isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Sản phẩm không tồn tại trong giỏ hàng",404));
+		}
+		int b = cartDetailRepository.editCartItem(cart.get().getId(),dto.getProductId(),dto.getQuantity());
+		if(b != 0) {
+			return ResponseEntity.ok().body(
+					new ResponseModel("Cập nhật thành công",200));
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+				new ResponseModel("Cập nhật thất bại",500));
 	}
 
 	@Override
-	public ResponseEntity<?> getListCartItems(Integer cartId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<?> getListCartItems(int accountId) {
+		Optional<Account> accOptional = accountRepository.findById(accountId);
+		if(accOptional.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Không tìm thấy tài khoản",404));
+		}
+		Optional<Cart> cart = cartRepository.findByAccount(accOptional.get());
+		if(cart.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Không tìm thấy giỏ hàng",404));
+		}
+		List<CartDetail> list = cartDetailRepository.findByCart(cart.get().getId());
+		List<CartItemResponse> reslist = new ArrayList<>();
+		for(CartDetail item : list) {
+			CartItemResponse cartItem = new CartItemResponse();
+			cartItem.setCartId(item.getCart().getId());
+			cartItem.setProductId(item.getProduct().getId());
+			cartItem.setName(item.getProduct().getName());
+			cartItem.setImage(item.getProduct().getImage());
+			cartItem.setPrice(item.getProduct().getPrice());
+			cartItem.setQuantity(item.getQuantity());
+			cartItem.setStatus(item.getProduct().getStatus());
+			reslist.add(cartItem);
+		}
+		return ResponseEntity.ok().body(new ResponseModel("Thành công",200,reslist));
 	}
 
 	@Override
-	public ResponseEntity<?> deleteCartItem(Integer cartId, Integer productId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<?> deleteCartItem(Integer accountId, Integer productId) {
+		Optional<Account> accOptional = accountRepository.findById(accountId);
+		if(accOptional.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Không tìm thấy tài khoản",404));
+		}
+		Optional<Cart> cart = cartRepository.findByAccount(accOptional.get());
+		if(cart.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Không tìm thấy giỏ hàng",404));
+		}
+		if(!cartDetailRepository.findByCartAndProduct(cart.get().getId(), productId).isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Sản phẩm không tồn tại trong giỏ hàng",404));
+		}
+		int rs = cartDetailRepository.deleteCartItem(accountId, productId);
+		if(rs != 0) {
+			return ResponseEntity.ok().body(
+					new ResponseModel("Xóa thành công",200));
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+				new ResponseModel("Xóa thất bại",500));
 	}
 
 	@Override
-	public ResponseEntity<?> deleteAllCartItems(Integer cartId) {
+	public ResponseEntity<?> deleteAllCartItems(int cartId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

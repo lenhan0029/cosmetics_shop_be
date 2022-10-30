@@ -8,13 +8,13 @@ public interface CartDetailService {
 
 	ResponseEntity<?> addToCart(int accountId,int productId, int quantity);
 	
-	ResponseEntity<?> editCartItem(AddToCartRequest dto);
+	ResponseEntity<?> editCartItem(int accountId, AddToCartRequest dto);
 	
-	ResponseEntity<?> getListCartItems(Integer cartId);
+	ResponseEntity<?> getListCartItems(int accountId);
 	
-	ResponseEntity<?> deleteCartItem(Integer cartId, Integer productId);
+	ResponseEntity<?> deleteCartItem(Integer accountId, Integer productId);
 	
-	ResponseEntity<?> deleteAllCartItems(Integer cartId);
+	ResponseEntity<?> deleteAllCartItems(int accountId);
 	
 	ResponseEntity<?> test(int cartid, int productid);
 }
