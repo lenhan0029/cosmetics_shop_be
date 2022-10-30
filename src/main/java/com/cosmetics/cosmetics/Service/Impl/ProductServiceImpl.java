@@ -88,9 +88,9 @@ public class ProductServiceImpl implements ProductService{
 						newPage, starArr, from, to);
 		if (pageProduct.hasContent())
 		{
-			return ResponseEntity.ok(new ResponseModel("thành công",200,pageProduct));
+			return ResponseEntity.ok(new ResponseModel("Thành công",200,pageProduct));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("không tồn tại sản phẩm",200));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Không tồn tại sản phẩm",200));
 	}
 
 	public Pageable createPage(int page, String sortType){
