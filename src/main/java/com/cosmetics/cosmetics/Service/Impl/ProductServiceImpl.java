@@ -88,9 +88,9 @@ public class ProductServiceImpl implements ProductService{
 						newPage, starArr, from, to);
 		if (pageProduct.hasContent())
 		{
-			return ResponseEntity.ok(new ResponseModel("Thành công",200,pageProduct));
+			return ResponseEntity.ok(new ResponseModel("thành công",200,pageProduct));
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Không tồn tại sản phẩm",200));
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("không tồn tại sản phẩm",200));
 	}
 
 	public Pageable createPage(int page, String sortType){
@@ -127,8 +127,11 @@ public class ProductServiceImpl implements ProductService{
 		prdetail.setImage(product.getImage());
 		prdetail.setPrice(product.getPrice());
 		prdetail.setQuantity(product.getQuantity());
-		prdetail.setRate(product.getQuantity());
+		prdetail.setRate(product.getStar());
 		prdetail.setDescription(product.getDescription());
+		prdetail.setBrand(product.getBrand().getName());
+		prdetail.setCategory(product.getType().getCategory().getName());
+		prdetail.setType(product.getType().getName());
 		return ResponseEntity.ok().body(new ResponseModel("Thành công",200,prdetail));
 	}
 
@@ -159,7 +162,8 @@ public class ProductServiceImpl implements ProductService{
 		product.setStatus(dto.getStatus());
 		Product newProduct = productRepository.save(product);
 		ProductDetail pr = new ProductDetail(newProduct.getId(), newProduct.getName(), newProduct.getImage(),
-				newProduct.getPrice(), newProduct.getStar(), newProduct.getQuantity(), newProduct.getDescription(),newProduct.getStatus());
+				newProduct.getPrice(), newProduct.getStar(), newProduct.getQuantity(), newProduct.getDescription(),newProduct.getStatus(),
+				newProduct.getBrand().getName(),newProduct.getType().getName(),newProduct.getType().getCategory().getName());
 		return ResponseEntity.ok().body(new ResponseModel("Thành công",200,pr));
 	}
 

@@ -19,5 +19,8 @@ public class ProductDetail {
 	private int quantity;
 	private String description;
 	private int Status;
+	private String brand;
+	private String type;
+	private String category;
 	
 }

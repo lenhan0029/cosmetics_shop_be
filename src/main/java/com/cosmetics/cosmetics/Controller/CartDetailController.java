@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,4 +51,16 @@ public class CartDetailController {
 			@RequestBody AddToCartRequest dto){
 		return cartDetailService.editCartItem(id, dto);
 	}
+	
+	@DeleteMapping
+	private ResponseEntity<?> deleteCartItem(
+			@RequestParam(name = "accountId", required = true) int accountId,
+			@RequestParam(name = "productId", required = true) int productId){
+		return cartDetailService.deleteCartItem(accountId, productId);
+	}
+	
+//	@DeleteMapping
+//	private ResponseEntity<?> deleteAllCartItem(@RequestParam(name = "accountId", required = true) int id){
+//		return cartDetailService.deleteAllCartItems(id);
+//	}
 }
