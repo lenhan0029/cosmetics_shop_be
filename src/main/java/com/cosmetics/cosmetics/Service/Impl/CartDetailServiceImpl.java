@@ -162,9 +162,24 @@ public class CartDetailServiceImpl implements CartDetailService{
 	}
 
 	@Override
-	public ResponseEntity<?> deleteAllCartItems(int cartId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<?> deleteAllCartItems(int accountId) {
+		Optional<Account> accOptional = accountRepository.findById(accountId);
+		if(accOptional.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Không tìm thấy tài khoản",404));
+		}
+		Optional<Cart> cart = cartRepository.findByAccount(accOptional.get());
+		if(cart.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+					new ResponseModel("Không tìm thấy giỏ hàng",404));
+		}
+		int rs = cartDetailRepository.deleteAllCartItem(accountId);
+		if(rs != 0) {
+			return ResponseEntity.ok().body(
+					new ResponseModel("Xóa thành công",200));
+		}
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+				new ResponseModel("Xóa thất bại",500));
 	}
 
 	@Override
@@ -175,7 +190,7 @@ public class CartDetailServiceImpl implements CartDetailService{
 		Optional<CartDetail> cd = cartDetailRepository.findByCartAndProduct(cartid, productid);
 //		Optional<CartDetail> cd = cartDetailRepository.findByCartAndProduct();
 		return ResponseEntity.ok().body(
-				new ResponseModel("Thành công",200,cd.get().getQuantity()));
+				new ResponseModel("thành công",200,cd.get().getQuantity()));
 	}
 
 }

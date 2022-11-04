@@ -81,14 +81,14 @@ public class EmailServiceImpl implements EmailService {
  
             // Sending the mail
             javaMailSender.send(mimeMessage);
-            return "Gửi mail thành công!!!";
+            return "Mail sent Successfully";
         }
  
         // Catch block to handle MessagingException
         catch (MessagingException e) {
  
             // Display message when exception occurred
-            return "Đã xảy ra lỗi khi gửi email!!!";
+            return "Error while sending mail!!!";
         }
     }
 }

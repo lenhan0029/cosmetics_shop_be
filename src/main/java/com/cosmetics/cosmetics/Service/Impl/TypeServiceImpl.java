@@ -40,14 +40,14 @@ public class TypeServiceImpl implements TypeService{
 		Type newType = new Type();
 		newType.setName(dto.getName());
 		if(!categoryRepository.findById(dto.getId_category()).isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Danh mục không tồn tại",404,dto));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("danh mục không tồn tại",404,dto));
 		}
 		if(typeRepository.findByName(dto.getName().toLowerCase()).isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Loại sản phẩm không tồn tại",404,dto));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("loại sản phẩm không tồn tại",404,dto));
 		}
 		Category catetype = categoryRepository.findById(dto.getId_category()).get();
 		newType.setCategory(catetype);
-		return ResponseEntity.ok(new ResponseModel("Tạo thành công",200,typeRepository.save(newType)));
+		return ResponseEntity.ok(new ResponseModel("tạo thành công",200,typeRepository.save(newType)));
 	}
 
 	@Override
@@ -55,38 +55,38 @@ public class TypeServiceImpl implements TypeService{
 		// TODO Auto-generated method stub
 		Optional<Type> oldType = typeRepository.findById(id);
 		if(typeRepository.findByName(dto.getName().toLowerCase()).isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Loại sản phẩm không tồn tại",404,dto));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("loại sản phẩm không tồn tại",404,dto));
 		}
 		if(!categoryRepository.findById(dto.getId_category()).isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Danh mục không tồn tại",404,dto));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("danh mục không tồn tại",404,dto));
 		}
 		Type newType = oldType.get();
 		newType.setName(dto.getName());
 		newType.setCategory(categoryRepository.findById(dto.getId_category()).get());
-		return ResponseEntity.ok(new ResponseModel("Thay đổi thành công",200,typeRepository.save(newType)));
+		return ResponseEntity.ok(new ResponseModel("thay đổi thành công",200,typeRepository.save(newType)));
 	}
 
 	@Override
 	public ResponseEntity<?> deleteType(int id) {
 		// TODO Auto-generated method stub
 		if(!typeRepository.findById(id).isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Loại sản phẩm không tồn tại",404,id));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("loại sản phẩm không tồn tại",404,id));
 		}
 		if(productRepository.findByType(typeRepository.findById(id).get()).isPresent()){
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(new ResponseModel("Không thể xóa loại sản phẩm có sản phẩm",409,id));
 		}
 		typeRepository.deleteById(id);
-		return ResponseEntity.ok(new ResponseModel("Xóa thành công",200,id));
+		return ResponseEntity.ok(new ResponseModel("xóa thành công",200,id));
 	}
 
 	@Override
 	public ResponseEntity<?> getTypeByCategory(int id) {
 		// TODO Auto-generated method stub
 		if(!categoryRepository.findById(id).isPresent()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Danh mục không tồn tại",404,id));
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("danh mục không tồn tại",404,id));
 		}
 		Collection<Type> optional = typeRepository.findByCategory(categoryRepository.findById(id).get());
-		return ResponseEntity.ok(new ResponseListModel("Tạo thành công",200,optional.toArray()));
+		return ResponseEntity.ok(new ResponseListModel("tạo thành công",200,optional.toArray()));
 	}
 
 }

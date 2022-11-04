@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService{
 		// TODO Auto-generated method stub
 		Optional<Account> account = accountRepository.findById(id);
 		if(!account.isPresent()) {
-			throw new ResourceNotFoundException("Tài khoản không tồn tại");
+			throw new ResourceNotFoundException("Account không tồn tại");
 		}
 		String encryptPassword = encoder.encode(dto.getOldPassword());
 		Account newAccount = account.get();
@@ -57,12 +57,12 @@ public class AccountServiceImpl implements AccountService{
 		// TODO Auto-generated method stub
 		Optional<Account> account = accountRepository.findById(id);
 		if(!account.isPresent()) {
-			throw new ResourceNotFoundException("Tài khoản không tồn tại");
+			throw new ResourceNotFoundException("Account không tồn tại");
 		}
 		Account newAccount = account.get();
 		Optional<Role> role = roleRepository.findById(dto.getRoleId());
 		if(!role.isPresent()) {
-			throw new ResourceNotFoundException("Quyền không tồn tại");
+			throw new ResourceNotFoundException("role không tồn tại");
 		}
 		newAccount.setRole(role.get());
 		if(dto.getStatus() == 1) {
