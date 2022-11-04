@@ -12,4 +12,6 @@ public interface AccountService {
 	ResponseEntity<?> editAccount(Integer id, EditAccountRequest dto);
 	
 	ResponseEntity<?> getListAccount(String searchCode, Integer roleId, boolean status, String sort);
+	
+	
 }

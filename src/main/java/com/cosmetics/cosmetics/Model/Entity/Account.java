@@ -2,6 +2,8 @@ package com.cosmetics.cosmetics.Model.Entity;
 
 import lombok.*;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -32,6 +34,9 @@ public class Account {
 
     @Column(name = "otp")
     private String otp;
+    
+    @Column(name = "create_time")
+    private Timestamp createTime;
     
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_role", referencedColumnName = "id")

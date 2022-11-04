@@ -10,4 +10,8 @@ public interface AuthService {
 	ResponseEntity<?> signup(SignupRequest dto);
 	
 	ResponseEntity<?> login(LoginRequest dto);
+	
+	ResponseEntity<?> activeAccount(String email,String code);
+	
+	ResponseEntity<?> sendOTP(String email);
 }

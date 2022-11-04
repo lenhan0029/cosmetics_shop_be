@@ -1,5 +1,11 @@
 package com.cosmetics.cosmetics.Service.Impl;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -78,11 +84,6 @@ public class AuthServiceImpl implements AuthService{
 		}
 		Account newAccount = modelMapper.map(dto, Account.class);
 		newAccount.setPassword(encoder.encode(dto.getPassword()));
-		if(dto.getStatus() == 1) {
-			newAccount.setStatus(true);
-		}else {
-			newAccount.setStatus(false);
-		}
 		Random randomNumber = new Random();
 		StringBuilder sb = new StringBuilder();
         for (int i = 0; i < 7; i++) {
@@ -90,18 +91,28 @@ public class AuthServiceImpl implements AuthService{
             char ch = ALPHA_NUMERIC.charAt(number);
             sb.append(ch);
         }
-        EmailDetails e = new EmailDetails(dto.getEmail(),sb.toString(),"Test send mail","");
-        int status = emailService.sendSimpleMail(e);
-        if(status == 0) {
-        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
-					"Email không tồn tại",404,dto));
-        }
+		EmailDetails e = new EmailDetails(dto.getEmail(),sb.toString(),"Test send mail","");
+		if(dto.getStatus() == 1) {
+			newAccount.setStatus(true);
+		}else {
+			newAccount.setStatus(false);
+			int status = emailService.sendSimpleMail(e);
+	        if(status == 0) {
+	        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+						"Email không tồn tại",404,dto));
+	        }
+	        Timestamp instant= Timestamp.from(Instant.now());
+	        newAccount.setCreateTime(instant);
+		}
+        
         newAccount.setOtp(sb.toString());
 		Role accountRole = roleRepository.findById(dto.getRoleId()).get();
 		newAccount.setRole(accountRole);
-		Account newAcc = accountRepository.save(newAccount);
 		UserInformation newUserInformation = userInformationRepository.save(modelMapper.map(dto, UserInformation.class));
 		newAccount.setUserInformation(newUserInformation);
+		Timestamp instant= Timestamp.from(Instant.now());
+		newAccount.setCreateTime(instant);
+		Account newAcc = accountRepository.save(newAccount);
 		return ResponseEntity.ok(new ResponseModel("Đăng ký thành công",200,newAcc));
 	}
 
@@ -113,15 +124,27 @@ public class AuthServiceImpl implements AuthService{
 	public ResponseEntity<?> login(LoginRequest dto) {
 		// TODO Auto-generated method stub
 		Optional<Account> optional = accountRepository.findByUserName(dto.getUsername());
-		if(!optional.isPresent()) {
+		
+		Optional<UserInformation> userInfor = userInformationRepository.findByEmail(dto.getUsername());
+		if(optional.isEmpty() && userInfor.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
 					"Tài khoản không tồn tại",404,dto));
 		}
-		if(!optional.get().isStatus()== true) {
+		if(optional.isPresent()) {
+			if(!optional.get().isStatus()== true) {
+				return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel(
+						"Tài khoản đã bị khóa",200));
+			}
+			if(!BCrypt.checkpw(dto.getPassword(),optional.get().getPassword())){
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+						"Mập khẩu không đúng",404,dto));
+			}
+		}
+		if(userInfor.get().getAccount().isStatus()== true) {
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel(
 					"Tài khoản đã bị khóa",200));
 		}
-		if(!BCrypt.checkpw(dto.getPassword(),optional.get().getPassword())){
+		if(!BCrypt.checkpw(dto.getPassword(),userInfor.get().getAccount().getPassword())){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
 					"Mập khẩu không đúng",404,dto));
 		}
@@ -134,6 +157,73 @@ public class AuthServiceImpl implements AuthService{
 				.collect(Collectors.toList());
 		return ResponseEntity.ok(new ResponseModel("Đăng nhập thành công",200,new LoginResponse(jwt, userDetails.getId(), userDetails.getUsername(), roles.get(0), userDetails.isStatus())));
 		
+	}
+
+	@Override
+	public ResponseEntity<?> activeAccount(String email,String code) {
+		Optional<UserInformation> userInfor = userInformationRepository.findByEmail(email);
+		if(userInfor.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Tài khoản không tồn tại 1",404));
+		}
+		Optional<Account> acc = accountRepository.findByUserInformation(userInfor.get());
+		if(acc.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Tài khoản không tồn tại 2",404));
+		}
+		Account newAccount = acc.get();
+		if(!newAccount.getOtp().equals(code)) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"OTP không đúng",404));
+		}
+		Timestamp instant= Timestamp.from(Instant.now());
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(instant.getTime());
+		cal.add(Calendar.SECOND, -120);
+		instant = new Timestamp(cal.getTime().getTime());
+		if(instant.after(newAccount.getCreateTime())) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"OTP đã hết hạn",404));
+		}
+		newAccount.setOtp("");
+		newAccount.setCreateTime(null);
+		newAccount.setStatus(true);
+		accountRepository.save(newAccount);
+		return ResponseEntity.ok(new ResponseModel("Tài khoản đã được kích hoạt",200));
+	}
+
+	@Override
+	public ResponseEntity<?> sendOTP(String email) {
+		Optional<UserInformation> userInfor = userInformationRepository.findByEmail(email);
+		if(userInfor.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Tài khoản không tồn tại",404));
+		}
+		Optional<Account> acc = accountRepository.findByUserInformation(userInfor.get());
+		if(acc.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Tài khoản không tồn tại",404));
+		}
+		Random randomNumber = new Random();
+		StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 7; i++) {
+            int number = randomNumber(0, ALPHA_NUMERIC.length() - 1);
+            char ch = ALPHA_NUMERIC.charAt(number);
+            sb.append(ch);
+        }
+        EmailDetails e = new EmailDetails(email,sb.toString(),"Test send mail","");
+        int status = emailService.sendSimpleMail(e);
+        if(status == 0) {
+        	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Email không tồn tại",404));
+        }
+        
+        Timestamp instant= Timestamp.from(Instant.now());
+        Account newAccount = acc.get();
+        newAccount.setCreateTime(instant);
+        newAccount.setOtp(sb.toString());
+        accountRepository.save(newAccount);
+		return ResponseEntity.ok(new ResponseModel("Gửi OTP thành công",200));
 	}
 
 	
