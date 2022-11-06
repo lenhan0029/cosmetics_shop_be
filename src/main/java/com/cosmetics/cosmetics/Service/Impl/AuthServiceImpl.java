@@ -25,8 +25,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
+import com.cosmetics.cosmetics.Model.DTO.Request.ForgotPassword;
 import com.cosmetics.cosmetics.Model.DTO.Request.LoginRequest;
 import com.cosmetics.cosmetics.Model.DTO.Request.SignupRequest;
+import com.cosmetics.cosmetics.Model.DTO.Request.VerifyRequest;
 import com.cosmetics.cosmetics.Model.DTO.Response.LoginResponse;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;
@@ -124,30 +126,19 @@ public class AuthServiceImpl implements AuthService{
 	public ResponseEntity<?> login(LoginRequest dto) {
 		// TODO Auto-generated method stub
 		Optional<Account> optional = accountRepository.findByUserName(dto.getUsername());
-		
-		Optional<UserInformation> userInfor = userInformationRepository.findByEmail(dto.getUsername());
-		if(optional.isEmpty() && userInfor.isEmpty()) {
+		if(optional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
 					"Tài khoản không tồn tại",404,dto));
 		}
-		if(optional.isPresent()) {
-			if(!optional.get().isStatus()== true) {
-				return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel(
-						"Tài khoản đã bị khóa",200));
-			}
-			if(!BCrypt.checkpw(dto.getPassword(),optional.get().getPassword())){
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
-						"Mập khẩu không đúng",404,dto));
-			}
-		}
-		if(userInfor.get().getAccount().isStatus()== true) {
+		if(!optional.get().isStatus()) {
 			return ResponseEntity.status(HttpStatus.OK).body(new ResponseModel(
-					"Tài khoản đã bị khóa",200));
+					"Tài khoản đã bị khóa",202));
 		}
-		if(!BCrypt.checkpw(dto.getPassword(),userInfor.get().getAccount().getPassword())){
+		if(!BCrypt.checkpw(dto.getPassword(),optional.get().getPassword())){
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
 					"Mập khẩu không đúng",404,dto));
 		}
+		
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -211,7 +202,7 @@ public class AuthServiceImpl implements AuthService{
             char ch = ALPHA_NUMERIC.charAt(number);
             sb.append(ch);
         }
-        EmailDetails e = new EmailDetails(email,sb.toString(),"Test send mail","");
+        EmailDetails e = new EmailDetails(email,sb.toString(),"Mã xác thực OTP","");
         int status = emailService.sendSimpleMail(e);
         if(status == 0) {
         	return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
@@ -224,6 +215,40 @@ public class AuthServiceImpl implements AuthService{
         newAccount.setOtp(sb.toString());
         accountRepository.save(newAccount);
 		return ResponseEntity.ok(new ResponseModel("Gửi OTP thành công",200));
+	}
+
+	@Override
+	public ResponseEntity<?> forgotPassword(ForgotPassword dto) {
+		Optional<UserInformation> userInfor = userInformationRepository.findByEmail(dto.getEmail());
+		if(userInfor.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Tài khoản không tồn tại",404));
+		}
+		Optional<Account> acc = accountRepository.findByUserInformation(userInfor.get());
+		if(acc.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Tài khoản không tồn tại",404));
+		}
+		Account newAccount = acc.get();
+		if(!newAccount.getOtp().equals(dto.getOtp())) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"OTP không đúng",404));
+		}
+		Timestamp instant= Timestamp.from(Instant.now());
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(instant.getTime());
+		cal.add(Calendar.SECOND, -120);
+		instant = new Timestamp(cal.getTime().getTime());
+		if(instant.after(newAccount.getCreateTime())) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"OTP đã hết hạn",404));
+		}
+		newAccount.setOtp("");
+		newAccount.setCreateTime(null);
+		newAccount.setStatus(true);
+		newAccount.setPassword(encoder.encode(dto.getNew_password()));
+		accountRepository.save(newAccount);
+		return ResponseEntity.ok(new ResponseModel("Mật khẩu mới đã được cập nhật",200));
 	}
 
 	

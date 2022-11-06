@@ -57,6 +57,9 @@ public class Product {
 	@Column(name = "status")
 	private int status;
 	
+	@Column(name = "discount")
+	private int discount;
+	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "id_brand")
 	private Brand brand;
@@ -65,9 +68,9 @@ public class Product {
 	@JoinColumn(name = "id_type")
 	private Type type;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "id_promotion", referencedColumnName = "id")
-	private Promotion promotion;
+//	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//	@JoinColumn(name = "id_promotion", referencedColumnName = "id")
+//	private Promotion promotion;
 	
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<CartDetail> cartDetails;

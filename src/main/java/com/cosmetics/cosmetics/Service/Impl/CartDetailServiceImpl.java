@@ -131,6 +131,7 @@ public class CartDetailServiceImpl implements CartDetailService{
 			cartItem.setPrice(item.getProduct().getPrice());
 			cartItem.setQuantity(item.getQuantity());
 			cartItem.setStatus(item.getProduct().getStatus());
+			cartItem.setDiscount(item.getProduct().getDiscount());
 			reslist.add(cartItem);
 		}
 		return ResponseEntity.ok().body(new ResponseModel("Thành công",200,reslist));

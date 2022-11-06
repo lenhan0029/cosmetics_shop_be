@@ -7,10 +7,12 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cosmetics.cosmetics.Model.DTO.Request.ForgotPassword;
 import com.cosmetics.cosmetics.Model.DTO.Request.LoginRequest;
 import com.cosmetics.cosmetics.Model.DTO.Request.SignupRequest;
 import com.cosmetics.cosmetics.Model.DTO.Request.VerifyRequest;
@@ -35,8 +37,13 @@ public class AuthController {
 		return authService.signup(signupRequest);
 	}
 	
-	@PostMapping("/verify")
+	@PutMapping("/verify")
 	public ResponseEntity<?> verify(@RequestBody VerifyRequest verifyRequest){
 		return authService.activeAccount(verifyRequest.getEmail(), verifyRequest.getOtp());
+	}
+	
+	@PutMapping("/forgotpassword")
+	public ResponseEntity<?> forgotPassword(@RequestBody ForgotPassword forgotPassword){
+		return authService.forgotPassword(forgotPassword);
 	}
 }
