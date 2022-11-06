@@ -1,5 +1,5 @@
-package com.cosmetics.cosmetics.Controller;
-
-public class PromotionController {
-
-}
+//package com.cosmetics.cosmetics.Controller;
+//
+//public class PromotionController {
+//
+//}

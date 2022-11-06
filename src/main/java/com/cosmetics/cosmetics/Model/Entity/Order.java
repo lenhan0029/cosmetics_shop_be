@@ -36,7 +36,6 @@ public class Order {
     private Integer id;
 	
 	@Column(name = "created_date")
-    @NotEmpty(message = "cannot generate created date")
     private Date createdDate;
 	
 	@Column(name = "updated_date")
@@ -44,6 +43,9 @@ public class Order {
 	
 	@Column(name = "paid_status")
     private boolean paidStatus;
+	
+	@Column(name = "total")
+    private boolean total;
 	
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<OrderDetail> orderDetails;
