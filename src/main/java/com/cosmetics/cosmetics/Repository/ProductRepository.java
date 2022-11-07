@@ -22,13 +22,13 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 	int findMaxPrice();
 	
 	@Query(value = "select NEW com.cosmetics.cosmetics.Model.DTO.Response.ProductResponse(" +
-			"pr.id, pr.name, pr.image, pr.price, pr.star,pr.status) " +
+			"pr.id, pr.name, pr.image, pr.price, pr.star,pr.status,pr.discount) " +
 			"from Product pr " +
 			"where " +
 			"(lower(pr.name)  like  %:name% or lower(pr.brand.name)  like %:brand% or " +
 			"lower(pr.type.name)  like  %:type% or lower(pr.type.category.name)  like %:category%) " +
-			"and pr.price between :from and :to " +
+			"and pr.price between :from and :to " + "and pr.discount >= :discount " +
 			"and pr.star in :star ", nativeQuery = false)
 	Page<ProductResponse> listProductBySearch(String name, String brand, String type, String category, Pageable page ,
-			int[] star, int from, int to);
+			int[] star, int from, int to,int discount);
 }

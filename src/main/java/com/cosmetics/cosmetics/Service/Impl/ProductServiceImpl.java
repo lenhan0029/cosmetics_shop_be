@@ -21,14 +21,14 @@ import com.cosmetics.cosmetics.Model.DTO.Response.ProductResponse;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Brand;
 import com.cosmetics.cosmetics.Model.Entity.Product;
-import com.cosmetics.cosmetics.Model.Entity.Promotion;
+//import com.cosmetics.cosmetics.Model.Entity.Promotion;
 import com.cosmetics.cosmetics.Model.Entity.Type;
 import com.cosmetics.cosmetics.Repository.BrandRepository;
 import com.cosmetics.cosmetics.Repository.CartDetailRepository;
 import com.cosmetics.cosmetics.Repository.CartRepository;
 import com.cosmetics.cosmetics.Repository.OrderDetailRepository;
 import com.cosmetics.cosmetics.Repository.ProductRepository;
-import com.cosmetics.cosmetics.Repository.PromotionRepository;
+//import com.cosmetics.cosmetics.Repository.PromotionRepository;
 import com.cosmetics.cosmetics.Repository.TypeRepository;
 import com.cosmetics.cosmetics.Service.ProductService;
 
@@ -37,19 +37,19 @@ public class ProductServiceImpl implements ProductService{
 	private final ProductRepository productRepository;
 	private final BrandRepository brandRepository;
 	private final TypeRepository typeRepository;
-	private final PromotionRepository promotionRepository;
+//	private final PromotionRepository promotionRepository;
 	private final CartDetailRepository cartDetailRepository;
 	private final OrderDetailRepository orderDetailRepository;
 	
 	@Autowired
 	public ProductServiceImpl(ProductRepository productRepository, BrandRepository brandRepository,
-			TypeRepository typeRepository, PromotionRepository promotionRepository,
+			TypeRepository typeRepository, /*PromotionRepository promotionRepository,*/
 			CartDetailRepository cartDetailRepository, OrderDetailRepository orderDetailRepository) {
 		super();
 		this.productRepository = productRepository;
 		this.brandRepository = brandRepository;
 		this.typeRepository = typeRepository;
-		this.promotionRepository = promotionRepository;
+//		this.promotionRepository = promotionRepository;
 		this.cartDetailRepository = cartDetailRepository;
 		this.orderDetailRepository = orderDetailRepository;
 	}
@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 	public ResponseEntity<?> getProductBySearch(String name, String brand, String type, String category, int star,
-			int from, int to, String sortType,int page) {
+			int from, int to, String sortType,int page,int discount) {
 		int[] starArr = new int[]{0,0,0,0,0};
 		if(star == 0) {
 			for(int i = 0; i < 5; i++) {
@@ -85,7 +85,7 @@ public class ProductServiceImpl implements ProductService{
 
 		Page<ProductResponse> pageProduct= this.productRepository.
 				listProductBySearch(name.toLowerCase(),brand.toLowerCase(),type.toLowerCase(),category.toLowerCase(),
-						newPage, starArr, from, to);
+						newPage, starArr, from, to,discount);
 		if (pageProduct.hasContent())
 		{
 			return ResponseEntity.ok(new ResponseModel("thành công",200,pageProduct));
@@ -140,7 +140,7 @@ public class ProductServiceImpl implements ProductService{
 	public ResponseEntity<?> createProduct(CreateProduct dto) {
 		Optional<Brand> brand = brandRepository.findById(dto.getId_brand());
 		Optional<Type> type = typeRepository.findById(dto.getId_type());
-		Optional<Promotion> promotion = promotionRepository.findById(dto.getId_promotion());
+//		Optional<Promotion> promotion = promotionRepository.findById(dto.getId_promotion());
 		if(brand.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Thương hiệu không tồn tại",404));
 		}
@@ -153,9 +153,11 @@ public class ProductServiceImpl implements ProductService{
 		product.setPrice(dto.getPrice());
 		product.setQuantity(dto.getQuantity());
 		product.setStar(dto.getRate());
-		if(promotion.isPresent()) {
-			product.setPromotion(promotion.get());
-		}
+		product.setDiscount(dto.getDiscount());
+//		if(promotion.isPresent()) {
+//			product.setPromotion(promotion.get());
+//		}
+		
 		product.setDescription(dto.getDescription());
 		product.setBrand(brand.get());
 		product.setType(type.get());
@@ -176,7 +178,7 @@ public class ProductServiceImpl implements ProductService{
 		}
 		Optional<Brand> brand = brandRepository.findById(dto.getId_brand());
 		Optional<Type> type = typeRepository.findById(dto.getId_type());
-		Optional<Promotion> promotion = promotionRepository.findById(dto.getId_promotion());
+//		Optional<Promotion> promotion = promotionRepository.findById(dto.getId_promotion());
 		if(brand.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("Thương hiệu không tồn tại",404));
 		}
@@ -186,9 +188,10 @@ public class ProductServiceImpl implements ProductService{
 		
 		Product oldProduct = otp.get();
 		oldProduct.setImage(dto.getImage());
-		if(promotion.isPresent()) {
-			oldProduct.setPromotion(promotion.get());
-		}
+//		if(promotion.isPresent()) {
+//			oldProduct.setPromotion(promotion.get());
+//		}
+		oldProduct.setDiscount(dto.getDiscount());
 		oldProduct.setName(dto.getName());
 		oldProduct.setPrice(dto.getPrice());
 		oldProduct.setQuantity(dto.getQuantity());

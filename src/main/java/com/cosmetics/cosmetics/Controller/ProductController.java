@@ -35,13 +35,15 @@ public class ProductController {
             @RequestParam(name = "priceFrom", defaultValue = "0", required = false) String from,
             @RequestParam(name = "priceTo", defaultValue = "0", required = false) String to,
             @RequestParam(name = "page", defaultValue = "0", required = false) String page,
-            @RequestParam(name = "sortType", defaultValue = "ASC", required = false) String sortType
+            @RequestParam(name = "sortType", defaultValue = "ASC", required = false) String sortType,
+            @RequestParam(name = "discount", defaultValue = "0", required = false) String discount
 			){
 		int starConverted = Integer.parseInt(star);
 		int priceFrom = Integer.parseInt(from);
 		int priceTo = Integer.parseInt(to);
 		int pageConverted = Integer.parseInt(page);
-		return productService.getProductBySearch(name, brand, type, category, starConverted, priceFrom, priceTo, sortType, pageConverted);
+		int discountConverted = Integer.parseInt(discount);
+		return productService.getProductBySearch(name, brand, type, category, starConverted, priceFrom, priceTo, sortType, pageConverted,discountConverted);
 		
 	}
 	

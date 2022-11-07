@@ -2,13 +2,17 @@ package com.cosmetics.cosmetics.Service.Impl;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
 import com.cosmetics.cosmetics.Model.DTO.Request.ChangePasswordRequest;
 import com.cosmetics.cosmetics.Model.DTO.Request.EditAccountRequest;
+import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;
 import com.cosmetics.cosmetics.Model.Entity.Role;
 import com.cosmetics.cosmetics.Repository.AccountRepository;
@@ -22,12 +26,10 @@ public class AccountServiceImpl implements AccountService{
 	final RoleRepository roleRepository;
 	private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-	public AccountServiceImpl(AccountRepository accountRepository, RoleRepository roleRepository,
-			BCryptPasswordEncoder encoder) {
+	public AccountServiceImpl(AccountRepository accountRepository, RoleRepository roleRepository) {
 		super();
 		this.accountRepository = accountRepository;
 		this.roleRepository = roleRepository;
-		this.encoder = encoder;
 	}
 
 	@Override
@@ -37,13 +39,15 @@ public class AccountServiceImpl implements AccountService{
 		if(!account.isPresent()) {
 			throw new ResourceNotFoundException("Account không tồn tại");
 		}
-		String encryptPassword = encoder.encode(dto.getOldPassword());
+		String encryptPassword = encoder.encode(dto.getNewPassword());
 		Account newAccount = account.get();
-		if(!newAccount.getPassword().equals(encryptPassword)) {
-			return ResponseEntity.badRequest().body("Sai mật khẩu");
+		if(!BCrypt.checkpw(dto.getOldPassword(),newAccount.getPassword())){
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Mập khẩu không đúng",404,dto));
 		}
 		newAccount.setPassword(encryptPassword);
-		return ResponseEntity.ok(accountRepository.save(newAccount));
+		accountRepository.save(newAccount);
+		return ResponseEntity.ok().body(new ResponseModel("Đổi mật khẩu thành công",200));
 	}
 
 	@Override

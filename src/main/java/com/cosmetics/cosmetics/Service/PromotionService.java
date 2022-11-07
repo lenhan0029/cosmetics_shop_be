@@ -1,5 +1,5 @@
-package com.cosmetics.cosmetics.Service;
-
-public interface PromotionService {
-
-}
+//package com.cosmetics.cosmetics.Service;
+//
+//public interface PromotionService {
+//
+//}

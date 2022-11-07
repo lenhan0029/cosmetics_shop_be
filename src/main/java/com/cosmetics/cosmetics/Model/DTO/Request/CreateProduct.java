@@ -17,6 +17,6 @@ public class CreateProduct {
 	private String description;
 	private int id_brand;
 	private int id_type;
-	private int id_promotion;
+	private int discount;
 	private int status;
 }

@@ -7,7 +7,7 @@ import com.cosmetics.cosmetics.Model.DTO.Request.CreateProduct;
 public interface ProductService {
 
 	ResponseEntity<?> getProductBySearch(String name, String brand, String type, 
-			String category, int star, int from, int to, String sortType,int page);
+			String category, int star, int from, int to, String sortType,int page,int discount);
 	
 	ResponseEntity<?> getByID(int id);
 	

@@ -55,7 +55,10 @@ public class CartDetailController {
 	@DeleteMapping
 	private ResponseEntity<?> deleteCartItem(
 			@RequestParam(name = "accountId", required = true) int accountId,
-			@RequestParam(name = "productId", required = true) int productId){
+			@RequestParam(name = "productId", required = false) int productId){
+		if(productId+"" == "") {
+			return cartDetailService.deleteAllCartItems(accountId);
+		}
 		return cartDetailService.deleteCartItem(accountId, productId);
 	}
 	
