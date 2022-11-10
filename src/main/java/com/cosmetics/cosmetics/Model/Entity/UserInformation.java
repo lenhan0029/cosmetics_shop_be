@@ -1,5 +1,7 @@
 package com.cosmetics.cosmetics.Model.Entity;
 
+import java.sql.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,7 +55,14 @@ public class UserInformation {
 	@Column(name = "image")
     private String image;
 	
+	@Column(name = "gender")
+    private String gender;
+	
+	@Column(name = "birthday")
+    private Date birthday;
+	
 	@OneToOne(mappedBy = "userInformation",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_account", referencedColumnName = "id")
+	@JsonIgnore
 	private Account account;
 }

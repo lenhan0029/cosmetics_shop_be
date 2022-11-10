@@ -1,5 +1,7 @@
 package com.cosmetics.cosmetics.Model.DTO.Request;
 
+import java.sql.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,5 +13,7 @@ public class UserInformationRequest {
 	private String lastName;
 	private String address;
 	private String phoneNumber;
+	private String gender;
 	private String image;
+	private Date birthday;
 }
