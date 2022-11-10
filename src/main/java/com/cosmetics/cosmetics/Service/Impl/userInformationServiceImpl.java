@@ -38,7 +38,7 @@ public class userInformationServiceImpl implements UserInformationService{
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
 					"Tài khoản không tồn tại",404));
 		}
-		Optional<UserInformation> optional = userInformationRepository.findByAccount(idAccount);
+		Optional<UserInformation> optional = userInformationRepository.findById(acc.get().getId());
 		if(optional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
 					"Thông tin tài khoản không tồn tại",404));
@@ -49,10 +49,29 @@ public class userInformationServiceImpl implements UserInformationService{
 		userInfo.setAddress(dto.getAddress());
 		userInfo.setPhoneNumber(dto.getPhoneNumber());
 		userInfo.setImage(dto.getImage());
+		userInfo.setBirthday(dto.getBirthday());
+		userInfo.setGender(dto.getGender());
 		UserInformation newUserInfo = userInformationRepository.save(userInfo);
 		UserInformationResponse userRes = modelMapper.map(newUserInfo, UserInformationResponse.class);
 		return ResponseEntity.ok().body(
 				new ResponseModel("Thay đổi thành công",200,userRes));
+	}
+
+	@Override
+	public ResponseEntity<?> getUserInformation(int idAccount) {
+		Optional<Account> acc = accountRepository.findById(idAccount);
+		if(acc.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Tài khoản không tồn tại",404));
+		}
+		Optional<UserInformation> optional = userInformationRepository.findById(acc.get().getId());
+		if(optional.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
+					"Thông tin tài khoản không tồn tại",404));
+		}
+		UserInformationResponse userRes = modelMapper.map(optional.get(), UserInformationResponse.class);
+		return ResponseEntity.ok().body(
+				new ResponseModel("Lấy thông tin thành công",200,userRes));
 	}
 	
 	

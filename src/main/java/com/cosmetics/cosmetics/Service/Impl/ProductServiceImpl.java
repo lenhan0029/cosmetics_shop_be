@@ -56,26 +56,26 @@ public class ProductServiceImpl implements ProductService{
 
 
 	@Override
-	public ResponseEntity<?> getProductBySearch(String name, String brand, String type, String category, int star,
+	public ResponseEntity<?> getProductBySearch(String name, String brand, String type, String category, Float star,
 			int from, int to, String sortType,int page,int discount) {
-		int[] starArr = new int[]{0,0,0,0,0};
-		if(star == 0) {
-			for(int i = 0; i < 5; i++) {
-				starArr[i] = i+1;
-			}
-		}else if(star < 9) {
-			starArr[0] = star;
-		}else {
-			int temp;
-			for(int i = 0; i < 5; i++) {
-				starArr[i] = star%10;
-				temp = star/10;
-				star = temp;
-				if(star < 0) {
-					break;
-				}
-			}
-		}
+//		int[] starArr = new int[]{0,0,0,0,0};
+//		if(star == 0) {
+//			for(int i = 0; i < 5; i++) {
+//				starArr[i] = i+1;
+//			}
+//		}else if(star < 9) {
+//			starArr[0] = star;
+//		}else {
+//			int temp;
+//			for(int i = 0; i < 5; i++) {
+//				starArr[i] = star%10;
+//				temp = star/10;
+//				star = temp;
+//				if(star < 0) {
+//					break;
+//				}
+//			}
+//		}
 		
 		
 		if(to == 0) {
@@ -85,7 +85,7 @@ public class ProductServiceImpl implements ProductService{
 
 		Page<ProductResponse> pageProduct= this.productRepository.
 				listProductBySearch(name.toLowerCase(),brand.toLowerCase(),type.toLowerCase(),category.toLowerCase(),
-						newPage, starArr, from, to,discount);
+						newPage, star, from, to,discount);
 		if (pageProduct.hasContent())
 		{
 			return ResponseEntity.ok(new ResponseModel("thành công",200,pageProduct));
@@ -132,6 +132,7 @@ public class ProductServiceImpl implements ProductService{
 		prdetail.setBrand(product.getBrand().getName());
 		prdetail.setCategory(product.getType().getCategory().getName());
 		prdetail.setType(product.getType().getName());
+		prdetail.setDiscount(product.getDiscount());
 		return ResponseEntity.ok().body(new ResponseModel("Thành công",200,prdetail));
 	}
 
@@ -165,7 +166,7 @@ public class ProductServiceImpl implements ProductService{
 		Product newProduct = productRepository.save(product);
 		ProductDetail pr = new ProductDetail(newProduct.getId(), newProduct.getName(), newProduct.getImage(),
 				newProduct.getPrice(), newProduct.getStar(), newProduct.getQuantity(), newProduct.getDescription(),newProduct.getStatus(),
-				newProduct.getBrand().getName(),newProduct.getType().getName(),newProduct.getType().getCategory().getName());
+				newProduct.getBrand().getName(),newProduct.getType().getName(),newProduct.getType().getCategory().getName(),newProduct.getDiscount());
 		return ResponseEntity.ok().body(new ResponseModel("Thành công",200,pr));
 	}
 
@@ -205,7 +206,7 @@ public class ProductServiceImpl implements ProductService{
 		prdetail.setImage(product.getImage());
 		prdetail.setPrice(product.getPrice());
 		prdetail.setQuantity(product.getQuantity());
-		prdetail.setRate(product.getQuantity());
+		prdetail.setRate(product.getStar());
 		prdetail.setDescription(product.getDescription());
 		prdetail.setStatus(product.getStatus());
 		return ResponseEntity.ok().body(

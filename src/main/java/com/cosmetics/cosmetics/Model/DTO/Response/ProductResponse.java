@@ -17,7 +17,7 @@ public class ProductResponse {
 	private String name;
 	private String image;
 	private int price;
-	private int rate;
+	private Float rate;
 	private int discount;
 	private int status;
 }

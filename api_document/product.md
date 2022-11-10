@@ -1,56 +1,48 @@
 1. GET list product (permit all)
 http://localhost:8080/product
+param: name (String), brand (String), type (String), category (String), star (1 to 5), priceFrom, priceTo, page , sortType (
+ASC or DESC), discount ( 1 or 0)
+
+response
 {
     "message": "thành công",
     "status": 200,
     "data": {
         "content": [
             {
-                "id": 2,
-                "name": "mask west",
-                "image": "maskwest.png",
-                "price": 10000,
-                "rate": 5
-            },
-            {
-                "id": 3,
-                "name": "mask honey",
-                "image": "maskhoney.png",
-                "price": 10000,
-                "rate": 5
-            },
-            {
                 "id": 1,
-                "name": "Mặt nạ ",
-                "image": "mask1.png",
-                "price": 20000,
-                "rate": 5
+                "name": "Sửa rửa mặt Cetaphil",
+                "image": "cetaphilsrm.png",
+                "price": 10000,
+                "rate": 5.0,
+                "discount": 10,
+                "status": 1
             }
         ],
         "pageable": {
             "sort": {
-                "empty": false,
+                "unsorted": false,
                 "sorted": true,
-                "unsorted": false
+                "empty": false
             },
-            "offset": 0,
             "pageNumber": 0,
             "pageSize": 12,
+            "offset": 0,
             "paged": true,
             "unpaged": false
         },
         "last": true,
+        "totalElements": 1,
         "totalPages": 1,
-        "totalElements": 3,
+        "sort": {
+            "unsorted": false,
+            "sorted": true,
+            "empty": false
+        },
+        "numberOfElements": 1,
+        "first": true,
         "size": 12,
         "number": 0,
-        "first": true,
-        "sort": {
-            "empty": false,
-            "sorted": true,
-            "unsorted": false
-        },
-        "numberOfElements": 3,
         "empty": false
     }
 }

@@ -9,4 +9,6 @@ import com.cosmetics.cosmetics.Model.DTO.Response.UserInformationResponse;
 public interface UserInformationService {
 
 	ResponseEntity<?> editUserInformation(Integer idAccount, UserInformationRequest dto); 
+	
+	ResponseEntity<?> getUserInformation(int idAccount);
 }

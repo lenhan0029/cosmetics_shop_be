@@ -7,18 +7,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.cosmetics.cosmetics.Model.DTO.Request.ItemOrder;
 import com.cosmetics.cosmetics.Model.DTO.Request.OrderRequest;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;
 import com.cosmetics.cosmetics.Model.Entity.DeliveryInformation;
 import com.cosmetics.cosmetics.Model.Entity.Order;
 import com.cosmetics.cosmetics.Model.Entity.OrderDetail;
+import com.cosmetics.cosmetics.Model.Entity.OrderKey;
 import com.cosmetics.cosmetics.Model.Entity.Status;
 import com.cosmetics.cosmetics.Model.Entity.Vourcher;
 import com.cosmetics.cosmetics.Repository.AccountRepository;
 import com.cosmetics.cosmetics.Repository.DeliveryInformationRepository;
 import com.cosmetics.cosmetics.Repository.OrderDetailRepository;
 import com.cosmetics.cosmetics.Repository.OrderRepository;
+import com.cosmetics.cosmetics.Repository.ProductRepository;
 import com.cosmetics.cosmetics.Repository.StatusRepository;
 import com.cosmetics.cosmetics.Repository.VourcherRepository;
 import com.cosmetics.cosmetics.Service.OrderService;
@@ -32,11 +35,12 @@ public class OrderServiceImpl implements OrderService{
 	final StatusRepository statusRepository;
 	final VourcherRepository vourcherRepository;
 	final DeliveryInformationRepository deliveryInformationRepository;
-
+	final ProductRepository productRepository;
 
 	public OrderServiceImpl(OrderRepository orderRepository, OrderDetailRepository orderDetailRepository,
 			AccountRepository accountRepository, StatusRepository statusRepository,
-			VourcherRepository vourcherRepository, DeliveryInformationRepository deliveryInformationRepository) {
+			VourcherRepository vourcherRepository, DeliveryInformationRepository deliveryInformationRepository,
+			ProductRepository productRepository) {
 		super();
 		this.orderRepository = orderRepository;
 		this.orderDetailRepository = orderDetailRepository;
@@ -44,6 +48,7 @@ public class OrderServiceImpl implements OrderService{
 		this.statusRepository = statusRepository;
 		this.vourcherRepository = vourcherRepository;
 		this.deliveryInformationRepository = deliveryInformationRepository;
+		this.productRepository = productRepository;
 	}
 
 
@@ -87,9 +92,11 @@ public class OrderServiceImpl implements OrderService{
 		}
 		order.setStatus(sta.get());
 		Order newOrder = orderRepository.save(order);
-		OrderDetail orderDetail = new OrderDetail();
-		
-		return ResponseEntity.ok().body(newOrder.getCreatedDate());
+		for (ItemOrder item : dto.getData()) {
+			orderDetailRepository.addOrderDetail(newOrder.getId(), item.getProductId(), item.getPrice(), item.getQuantity());
+			
+		}
+		return ResponseEntity.ok().body(new ResponseModel("Thành công",200));
 	}
 
 }
