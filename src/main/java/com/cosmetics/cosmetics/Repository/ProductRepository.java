@@ -31,4 +31,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 			"and pr.star >= :star ", nativeQuery = false)
 	Page<ProductResponse> listProductBySearch(String name, String brand, String type, String category, Pageable page ,
 			Float star, int from, int to,int discount);
+
 }

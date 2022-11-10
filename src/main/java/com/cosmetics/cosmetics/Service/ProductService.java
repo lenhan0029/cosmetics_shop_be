@@ -8,6 +8,7 @@ public interface ProductService {
 
 	ResponseEntity<?> getProductBySearch(String name, String brand, String type, 
 			String category, Float star, int from, int to, String sortType,int page,int discount);
+
 	
 	ResponseEntity<?> getByID(int id);
 	

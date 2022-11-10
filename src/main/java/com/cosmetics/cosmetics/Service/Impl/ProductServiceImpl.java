@@ -56,6 +56,7 @@ public class ProductServiceImpl implements ProductService{
 
 
 	@Override
+
 	public ResponseEntity<?> getProductBySearch(String name, String brand, String type, String category, Float star,
 			int from, int to, String sortType,int page,int discount) {
 //		int[] starArr = new int[]{0,0,0,0,0};
@@ -76,6 +77,7 @@ public class ProductServiceImpl implements ProductService{
 //				}
 //			}
 //		}
+
 		
 		
 		if(to == 0) {
@@ -86,6 +88,7 @@ public class ProductServiceImpl implements ProductService{
 		Page<ProductResponse> pageProduct= this.productRepository.
 				listProductBySearch(name.toLowerCase(),brand.toLowerCase(),type.toLowerCase(),category.toLowerCase(),
 						newPage, star, from, to,discount);
+
 		if (pageProduct.hasContent())
 		{
 			return ResponseEntity.ok(new ResponseModel("thành công",200,pageProduct));
