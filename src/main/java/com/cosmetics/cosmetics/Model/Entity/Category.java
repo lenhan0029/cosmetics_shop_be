@@ -37,6 +37,6 @@ public class Category {
     @NotEmpty(message = "cannot generate name")
     private String name;
 	
-	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
 	private Set<Type> types;
 }

@@ -29,12 +29,12 @@ public class CartDetail {
 	@EmbeddedId
 	CartKey id;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idCart")
 	@JoinColumn(name = "id_cart")
 	private Cart cart;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idProduct")
 	@JoinColumn(name = "id_product")
 	private Product product;

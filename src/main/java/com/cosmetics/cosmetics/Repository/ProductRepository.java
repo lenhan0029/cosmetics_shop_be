@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 	int findMaxPrice();
 	
 	@Query(value = "select NEW com.cosmetics.cosmetics.Model.DTO.Response.ProductResponse(" +
-			"pr.id, pr.name, pr.image, pr.price, pr.star,pr.discount,pr.status) " +
+			"pr.id, pr.name, pr.image, pr.price, pr.star,pr.discount,pr.status, pr.type.name, pr.brand.name, pr.type.category.name) " +
 			"from Product pr " +
 			"where " +
 			"(lower(pr.name)  like  %:name% and lower(pr.brand.name)  like %:brand% and " +

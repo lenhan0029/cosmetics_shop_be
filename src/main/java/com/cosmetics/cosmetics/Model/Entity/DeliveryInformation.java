@@ -46,10 +46,10 @@ public class DeliveryInformation {
 	@Column(name = "is_default")
     private boolean isDefault;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_account")
 	private Account account;
 	
-	@OneToOne(mappedBy = "deliveryInformation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "deliveryInformation", fetch = FetchType.LAZY)
 	private Order order;
 }

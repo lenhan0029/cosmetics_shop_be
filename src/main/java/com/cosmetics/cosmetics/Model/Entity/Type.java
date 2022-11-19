@@ -40,12 +40,12 @@ public class Type {
     @NotEmpty(message = "cannot generate name")
     private String name;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_category")
 	@JsonIgnore
 	private Category category;
 	
-	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Set<Product> products;
 }

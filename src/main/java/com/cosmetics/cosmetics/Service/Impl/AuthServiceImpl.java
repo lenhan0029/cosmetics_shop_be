@@ -32,10 +32,12 @@ import com.cosmetics.cosmetics.Model.DTO.Request.VerifyRequest;
 import com.cosmetics.cosmetics.Model.DTO.Response.LoginResponse;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;
+import com.cosmetics.cosmetics.Model.Entity.DeliveryInformation;
 import com.cosmetics.cosmetics.Model.Entity.EmailDetails;
 import com.cosmetics.cosmetics.Model.Entity.Role;
 import com.cosmetics.cosmetics.Model.Entity.UserInformation;
 import com.cosmetics.cosmetics.Repository.AccountRepository;
+import com.cosmetics.cosmetics.Repository.DeliveryInformationRepository;
 import com.cosmetics.cosmetics.Repository.RoleRepository;
 import com.cosmetics.cosmetics.Repository.UserInformationRepository;
 import com.cosmetics.cosmetics.Security.JwtUtils;
@@ -55,6 +57,7 @@ public class AuthServiceImpl implements AuthService{
 	final ModelMapper modelMapper;
 	final RoleRepository roleRepository;
 	final JwtUtils jwtUtils;
+	final DeliveryInformationRepository deliveryInformationRepository;
 	private static final String alpha = "abcdefghijklmnopqrstuvwxyz"; // a-z
 	private static final String alphaUpperCase = alpha.toUpperCase(); // A-Z
 	private static final String digits = "0123456789"; // 0-9
@@ -65,7 +68,7 @@ public class AuthServiceImpl implements AuthService{
 
 	public AuthServiceImpl(AuthenticationManager authenticationManager, AccountRepository accountRepository,
 			UserInformationRepository userInformationRepository, PasswordEncoder passwordEncoder,
-			ModelMapper modelMapper, RoleRepository roleRepository, JwtUtils jwtUtils) {
+			ModelMapper modelMapper, RoleRepository roleRepository, JwtUtils jwtUtils, DeliveryInformationRepository deliveryInformationRepository) {
 		super();
 		this.authenticationManager = authenticationManager;
 		this.accountRepository = accountRepository;
@@ -74,6 +77,7 @@ public class AuthServiceImpl implements AuthService{
 		this.modelMapper = modelMapper;
 		this.roleRepository = roleRepository;
 		this.jwtUtils = jwtUtils;
+		this.deliveryInformationRepository = deliveryInformationRepository;
 	}
 
 	@Override
@@ -115,6 +119,13 @@ public class AuthServiceImpl implements AuthService{
 		Timestamp instant= Timestamp.from(Instant.now());
 		newAccount.setCreateTime(instant);
 		Account newAcc = accountRepository.save(newAccount);
+		DeliveryInformation deliveryInformation = new DeliveryInformation();
+		deliveryInformation.setAccount(newAcc);
+		deliveryInformation.setAddress(dto.getAddress());
+		deliveryInformation.setDefault(true);
+		deliveryInformation.setName(dto.getFirstName() + " " + dto.getLastName());
+		deliveryInformation.setPhoneNumber(dto.getPhoneNumber());
+		deliveryInformationRepository.save(deliveryInformation);
 		return ResponseEntity.ok(new ResponseModel("Đăng ký thành công",200,newAcc));
 	}
 

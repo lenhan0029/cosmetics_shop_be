@@ -16,5 +16,5 @@ public class ItemOrder {
 	private int quantity;
 	
 	@NotEmpty
-	private int price;
+	private Float price;
 }
