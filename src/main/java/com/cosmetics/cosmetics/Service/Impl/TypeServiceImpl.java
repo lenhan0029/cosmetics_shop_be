@@ -7,8 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.cosmetics.cosmetics.Exception.ResourceAlreadyExistException;
-import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
 import com.cosmetics.cosmetics.Model.DTO.Request.TypeRequest;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseListModel;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
