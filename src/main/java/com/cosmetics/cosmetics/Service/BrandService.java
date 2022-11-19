@@ -2,8 +2,6 @@ package com.cosmetics.cosmetics.Service;
 
 import org.springframework.http.ResponseEntity;
 
-import com.cosmetics.cosmetics.Model.Entity.Brand;
-
 public interface BrandService {
 
 	ResponseEntity<?> createBrand(String brandName);  
