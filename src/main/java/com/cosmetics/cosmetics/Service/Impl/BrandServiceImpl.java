@@ -5,8 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.cosmetics.cosmetics.Exception.ResourceAlreadyExistException;
-import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Brand;
 import com.cosmetics.cosmetics.Repository.BrandRepository;

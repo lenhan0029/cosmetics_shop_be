@@ -1,10 +1,7 @@
 package com.cosmetics.cosmetics.Service.Impl;
 
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +21,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
 import com.cosmetics.cosmetics.Model.DTO.Request.ForgotPassword;
 import com.cosmetics.cosmetics.Model.DTO.Request.LoginRequest;
 import com.cosmetics.cosmetics.Model.DTO.Request.SignupRequest;
-import com.cosmetics.cosmetics.Model.DTO.Request.VerifyRequest;
 import com.cosmetics.cosmetics.Model.DTO.Response.LoginResponse;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;

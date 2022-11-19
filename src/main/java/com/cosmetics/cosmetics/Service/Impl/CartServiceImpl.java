@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;
 import com.cosmetics.cosmetics.Model.Entity.Cart;
