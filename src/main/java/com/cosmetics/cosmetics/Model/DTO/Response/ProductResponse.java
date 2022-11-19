@@ -20,4 +20,7 @@ public class ProductResponse {
 	private Float rate;
 	private int discount;
 	private int status;
+	private String type;
+	private String brand;
+	private String category;
 }

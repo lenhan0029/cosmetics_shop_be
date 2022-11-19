@@ -85,6 +85,14 @@ public class OrderServiceImpl implements OrderService{
 		java.util.Date date = new java.util.Date();
 		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
 		
+		for (ItemOrder item : dto.getData()) {
+			Product product = productRepository.findById(item.getProductId()).get();
+			if(product.getQuantity() < item.getQuantity()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+						new ResponseModel("Không đủ số lượng mua",404));
+			}
+			
+		}
 		Order order = new Order();
 		order.setAccount(acc.get());
 		order.setCreatedDate(sqlDate);
