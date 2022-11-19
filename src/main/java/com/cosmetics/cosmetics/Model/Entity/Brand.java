@@ -37,7 +37,7 @@ public class Brand {
     @NotEmpty(message = "cannot generate name")
     private String name;
 	
-	@OneToMany(mappedBy = "brand", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "brand", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Set<Product> products;
 }

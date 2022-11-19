@@ -69,9 +69,9 @@ public class Vourcher {
     @NotEmpty(message = "cannot generate condition")
 	private Integer condition;
 	
-	@OneToOne(mappedBy = "vourcher", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "vourcher", fetch = FetchType.LAZY)
 	private Order order;
 	
-	@OneToMany(mappedBy = "vourcher", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "vourcher", fetch = FetchType.LAZY)
 	private Set<VourcherDetail> vourcherDetails;
 }

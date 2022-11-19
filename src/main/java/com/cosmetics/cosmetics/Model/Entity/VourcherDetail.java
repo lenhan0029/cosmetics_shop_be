@@ -27,12 +27,12 @@ public class VourcherDetail {
 	@EmbeddedId
 	VourcherKey id;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idAccount")
 	@JoinColumn(name = "id_account")
 	private Account account;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idVourcher")
 	@JoinColumn(name = "id_vourcher")
 	private Vourcher vourcher;

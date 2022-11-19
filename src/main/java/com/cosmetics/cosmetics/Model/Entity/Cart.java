@@ -34,11 +34,11 @@ public class Cart {
     @Column(name = "id")
     private Integer id;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_account", referencedColumnName = "id")
 	@JsonIgnore
 	private Account account;
 	
-	@OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
 	private Set<CartDetail> cartDetails;
 }

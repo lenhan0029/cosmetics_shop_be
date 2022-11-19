@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cosmetics.cosmetics.Model.DTO.Request.BrandRequest;
 import com.cosmetics.cosmetics.Service.BrandService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -29,12 +30,12 @@ public class BrandController {
 		return brandService.getAll();
 	}
 	@PostMapping
-	public ResponseEntity<?> createBrand(@RequestBody String brandName){
-		return brandService.createBrand(brandName);
+	public ResponseEntity<?> createBrand(@RequestBody BrandRequest dto){
+		return brandService.createBrand(dto.getName());
 	}
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateBrand(@PathVariable("id") int id,@RequestBody String brandName){
-		return brandService.updateBrand(id, brandName);
+	public ResponseEntity<?> updateBrand(@PathVariable("id") int id,@RequestBody BrandRequest dto){
+		return brandService.updateBrand(id, dto.getName());
 	}
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteBrand(@PathVariable("id") int id){

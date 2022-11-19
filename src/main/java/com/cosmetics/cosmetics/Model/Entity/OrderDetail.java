@@ -27,12 +27,12 @@ public class OrderDetail {
 	@EmbeddedId
 	OrderKey id;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idOrder")
 	@JoinColumn(name = "id_order")
 	private Order order;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idProduct")
 	@JoinColumn(name = "id_product")
 	private Product product;
@@ -43,7 +43,7 @@ public class OrderDetail {
 	
 	@Column(name = "price")
     @NotEmpty(message = "cannot generate price")
-    private Integer price;
+    private Float price;
 	
 	
 }

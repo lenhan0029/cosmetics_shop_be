@@ -15,5 +15,5 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, OrderK
 	@Modifying
 	@Query(value = "INSERT INTO order_detail VALUES (:orderId, :productId, :price, :quantity)", nativeQuery = true)
 	@Transactional
-	int addOrderDetail(@Param("orderId") int orderId, @Param("productId") int productId,@Param("price") int price,@Param("quantity") int quantity);
+	int addOrderDetail(@Param("orderId") int orderId, @Param("productId") int productId,@Param("price") Float price,@Param("quantity") int quantity);
 }

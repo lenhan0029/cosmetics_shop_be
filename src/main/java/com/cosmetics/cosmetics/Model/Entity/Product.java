@@ -60,24 +60,24 @@ public class Product {
 	@Column(name = "discount")
 	private int discount;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_brand")
 	private Brand brand;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_type")
 	private Type type;
 	
-//	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	@JoinColumn(name = "id_promotion", referencedColumnName = "id")
-//	private Promotion promotion;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_promotion", referencedColumnName = "id")
+	private Promotion promotion;
 	
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
 	private Set<CartDetail> cartDetails;
 	
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
 	private Set<OrderDetail> orderDetails;
 	
-	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
 	private Set<Rating> ratings;
 }

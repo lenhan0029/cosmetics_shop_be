@@ -35,7 +35,7 @@ public class Role {
     @NotEmpty(message = "cannot generate name")
     private String name;
 	
-	@OneToOne(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "role", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Account account;
 	

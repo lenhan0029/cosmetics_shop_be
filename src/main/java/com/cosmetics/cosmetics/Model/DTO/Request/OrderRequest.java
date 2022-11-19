@@ -23,6 +23,8 @@ public class OrderRequest {
 	
 	private int id_voucher;
 	
+	private Float total;
+	
 	@NotEmpty
 	private int id_status;
 	

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cosmetics.cosmetics.Model.DTO.Request.CategoryRequest;
 import com.cosmetics.cosmetics.Service.CategoryService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -30,13 +31,13 @@ public class CategoryController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> createCategory(@RequestBody String categoryName){
-		return categoryService.createCategory(categoryName);
+	public ResponseEntity<?> createCategory(@RequestBody CategoryRequest dto){
+		return categoryService.createCategory(dto.getName());
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateCategory(@PathVariable("id") int id,@RequestBody String categoryName){
-		return categoryService.updateCategory(id, categoryName);
+	public ResponseEntity<?> updateCategory(@PathVariable("id") int id,@RequestBody CategoryRequest dto){
+		return categoryService.updateCategory(id, dto.getName());
 	}
 	
 	@DeleteMapping("/{id}")

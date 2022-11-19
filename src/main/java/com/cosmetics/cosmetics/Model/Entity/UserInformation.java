@@ -61,7 +61,7 @@ public class UserInformation {
 	@Column(name = "birthday")
     private Date birthday;
 	
-	@OneToOne(mappedBy = "userInformation",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "userInformation",fetch = FetchType.LAZY)
     @JoinColumn(name = "id_account", referencedColumnName = "id")
 	@JsonIgnore
 	private Account account;
