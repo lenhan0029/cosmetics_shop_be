@@ -1,4 +1,4 @@
-//package com.cosmetics.cosmetics.Config;
+package com.cosmetics.cosmetics.Config;
 //
 //import java.util.Date;
 //import java.time.Instant;
