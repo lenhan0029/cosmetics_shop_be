@@ -15,12 +15,12 @@ public class ProductDetail {
 	private String name;
 	private String image;
 	private int price;
-	private int rate;
+	private Float rate;
 	private int quantity;
 	private String description;
 	private int Status;
 	private String brand;
 	private String type;
 	private String category;
-	
+	private int discount;
 }

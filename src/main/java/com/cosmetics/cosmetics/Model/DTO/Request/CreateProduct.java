@@ -12,7 +12,7 @@ public class CreateProduct {
 	private String name;
 	private String image;
 	private int price;
-	private int rate;
+	private Float rate;
 	private int quantity;
 	private String description;
 	private int id_brand;

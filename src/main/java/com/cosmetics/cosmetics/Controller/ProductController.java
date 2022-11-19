@@ -38,7 +38,7 @@ public class ProductController {
             @RequestParam(name = "sortType", defaultValue = "ASC", required = false) String sortType,
             @RequestParam(name = "discount", defaultValue = "0", required = false) String discount
 			){
-		int starConverted = Integer.parseInt(star);
+		Float starConverted = Float.parseFloat(star);
 		int priceFrom = Integer.parseInt(from);
 		int priceTo = Integer.parseInt(to);
 		int pageConverted = Integer.parseInt(page);

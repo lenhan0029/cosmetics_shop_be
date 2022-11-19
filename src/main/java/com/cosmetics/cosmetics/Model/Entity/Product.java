@@ -52,7 +52,7 @@ public class Product {
     private String description;
 	
 	@Column(name = "star")
-    private Integer star;
+    private Float star;
 	
 	@Column(name = "status")
 	private int status;
