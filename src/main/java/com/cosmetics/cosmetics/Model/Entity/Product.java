@@ -68,10 +68,6 @@ public class Product {
 	@JoinColumn(name = "id_type")
 	private Type type;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_promotion", referencedColumnName = "id")
-	private Promotion promotion;
-	
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
 	private Set<CartDetail> cartDetails;
 	

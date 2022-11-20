@@ -2,7 +2,7 @@ package com.cosmetics.cosmetics.Service;
 
 import org.springframework.http.ResponseEntity;
 
-public interface OrderDetailService {
+public interface StatisticalService {
 
-	ResponseEntity<?> getByOrder(int id_order);
+	ResponseEntity<?> getTopSell();
 }

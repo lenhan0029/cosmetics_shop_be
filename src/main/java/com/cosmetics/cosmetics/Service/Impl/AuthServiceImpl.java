@@ -92,7 +92,7 @@ public class AuthServiceImpl implements AuthService{
             char ch = ALPHA_NUMERIC.charAt(number);
             sb.append(ch);
         }
-		EmailDetails e = new EmailDetails(dto.getEmail(),sb.toString(),"Test send mail","");
+		EmailDetails e = new EmailDetails(dto.getEmail(),sb.toString(),"OTP xác nhân email","");
 		if(dto.getStatus() == 1) {
 			newAccount.setStatus(true);
 		}else {

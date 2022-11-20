@@ -70,14 +70,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
-            .antMatchers("/auth/**","/account/**", "/api/public/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
-            .antMatchers(HttpMethod.GET,"/brand/**","/type/**","/category/**","/product/**","/userInformation/**").permitAll()
+            .antMatchers("/auth/**","/account/**", "/api/public/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+            .antMatchers(HttpMethod.GET,"/brand/**","/type/**","/category/**","/product/**","/statistical/**","/userInformation/**").permitAll()
 
             .antMatchers(HttpMethod.POST,"/order/**").permitAll()
             .antMatchers(HttpMethod.POST,"/brand/**","/type/**","/category/**","/product/**").hasAuthority("admin")
             .antMatchers(HttpMethod.PUT,"/brand/**","/type/**","/category/**").hasAuthority("admin")
             .antMatchers(HttpMethod.DELETE,"/brand/**","/type/**","/category/**").hasAuthority("admin")
             .antMatchers(HttpMethod.GET,"/cartdetail/**").hasAuthority("member")
+            .antMatchers(HttpMethod.GET,"/order/**").hasAuthority("member")
             .antMatchers(HttpMethod.POST,"/cartdetail/**").hasAuthority("member")
             .antMatchers(HttpMethod.PUT,"/userInformation/**").permitAll()
         	.anyRequest().authenticated();
