@@ -1,10 +1,7 @@
 package com.cosmetics.cosmetics.Service.Impl;
 
-<<<<<<< HEAD
 import java.sql.Date;
 import java.util.Arrays;
-=======
->>>>>>> d10b72f70fe0b3a2cb34eeb88d1fa1c80d86b929
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
