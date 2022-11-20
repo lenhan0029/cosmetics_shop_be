@@ -1,9 +1,15 @@
 package com.cosmetics.cosmetics.Service.Impl;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +19,7 @@ import com.cosmetics.cosmetics.Model.DTO.Request.ItemOrder;
 
 import com.cosmetics.cosmetics.Model.DTO.Request.OrderRequest;
 import com.cosmetics.cosmetics.Model.DTO.Request.ShipDTO;
+import com.cosmetics.cosmetics.Model.DTO.Response.OrderResponse;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;
 import com.cosmetics.cosmetics.Model.Entity.DeliveryInformation;
@@ -120,57 +127,56 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 
+//	@Override
+//	public ResponseEntity<?> getAllOrder(int statusId, int page) {
+//		Pageable pageItems = PageRequest.of(page, 12,Sort.by("createdDate"));
+//		if(statusId == 0) {
+//			Page<Order> orders = orderRepository.findAll(pageItems);
+//			if(orders.isEmpty()) {
+//				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+//						new ResponseModel("Không tìm thấy đơn hàng",404));
+//			}
+//			return ResponseEntity.ok().body(
+//					new ResponseModel("Danh sánh đơn hàng",200,orders));
+//		}
+//		Optional<Status> status = statusRepository.findById(statusId);
+//		if(status.isEmpty()) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+//					new ResponseModel("Không tìm thấy trạng thái",404));
+//		}
+//		List<Order> orders = orderRepository.findByStatus(status.get(),pageItems);
+//		if(orders.isEmpty()) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+//					new ResponseModel("Không tìm thấy đơn hàng",404));
+//		}
+//		return ResponseEntity.ok().body(
+//				new ResponseModel("Danh sánh đơn hàng",200,orders));
+//	}
+
+
 	@Override
-	public ResponseEntity<?> getAllOrder(int statusId) {
-		if(statusId == 0) {
-			List<Order> orders = orderRepository.findAll();
-			if(orders.isEmpty()) {
+	public ResponseEntity<?> getListOrderByAccount(int accountId, String statusId, int page) {
+		String[] temp = statusId.split("");
+		for (String string : temp) {
+			String[] arr = {"1","2","3","4","5","6","7"};
+			if(!Arrays.asList(arr).contains(string)) {
+				System.out.println(temp.toString());
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-						new ResponseModel("Không tìm thấy đơn hàng",404));
+						new ResponseModel("Trạng thái không hợp lệ",404));
 			}
-			return ResponseEntity.ok().body(
-					new ResponseModel("Danh sánh đơn hàng",200,orders));
 		}
-		Optional<Status> status = statusRepository.findById(statusId);
-		if(status.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-					new ResponseModel("Không tìm thấy trạng thái",404));
-		}
-		List<Order> orders = orderRepository.findByStatus(status.get());
-		if(orders.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-					new ResponseModel("Không tìm thấy đơn hàng",404));
-		}
-		return ResponseEntity.ok().body(
-				new ResponseModel("Danh sánh đơn hàng",200,orders));
-	}
-
-
-	@Override
-	public ResponseEntity<?> getListOrderByAccount(int accountId) {
+		int[] status = Stream.of(temp).mapToInt(Integer::parseInt).toArray();
+		Pageable pageItems = PageRequest.of(page, 12,Sort.by("createdDate"));
 		Optional<Account> account = accountRepository.findById(accountId);
-		if(account.isEmpty()) {
+		if(accountId != 0 && account.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
 					new ResponseModel("Không tìm thấy tài khoản",404));
 		}
-		if(account.get().getRole().getId() == 1) {
+		if(!account.isEmpty() && account.get().getRole().getId() == 1) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
 					new ResponseModel("Người quản lý không có đơn hàng",404));
 		}
-		if(account.get().getRole().getId() == 2) {
-			List<Order> orders = orderRepository.findByAccount(account.get());
-			if(orders.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-						new ResponseModel("Không có đơn hàng",404));
-			}
-			return ResponseEntity.ok().body(
-					new ResponseModel("Danh sánh đơn hàng",200,orders));
-		}
-		List<Order> orders = orderRepository.findByShipper(account.get());
-		if(orders.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-					new ResponseModel("Không có đơn hàng",404));
-		}
+		Page<OrderResponse> orders = orderRepository.listOrderBySearch(accountId, status, pageItems);
 		return ResponseEntity.ok().body(
 				new ResponseModel("Danh sánh đơn hàng",200,orders));
 	}
