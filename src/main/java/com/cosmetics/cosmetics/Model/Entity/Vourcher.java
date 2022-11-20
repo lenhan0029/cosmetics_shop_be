@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,32 +48,34 @@ public class Vourcher {
     private String image;
 	
 	@Column(name = "started_date")
-    @NotEmpty(message = "cannot generate started date")
+//    @NotEmpty(message = "cannot generate started date")
     private Date startedDate;
 	
 	@Column(name = "expired_date")
-    @NotEmpty(message = "cannot generate expired date")
+//    @NotEmpty(message = "cannot generate expired date")
     private Date expiredDate;
 	
 	@Column(name = "percentage")
-    @NotEmpty(message = "cannot generate percentage")
+//    @NotEmpty(message = "cannot generate percentage")
     private Integer percentage;
 	
 	@Column(name = "quantity")
-    @NotEmpty(message = "cannot generate quantity")
+//    @NotEmpty(message = "cannot generate quantity")
 	private Integer quantity;
 	
 	@Column(name = "status")
-    @NotEmpty(message = "cannot generate status")
+//    @NotEmpty(message = "cannot generate status")
 	private boolean status;
 	
 	@Column(name = "condition")
-    @NotEmpty(message = "cannot generate condition")
+//    @NotEmpty(message = "cannot generate condition")
 	private Integer condition;
 	
 	@OneToOne(mappedBy = "vourcher", fetch = FetchType.LAZY)
+    @JsonIgnore
 	private Order order;
 	
 	@OneToMany(mappedBy = "vourcher", fetch = FetchType.LAZY)
+    @JsonIgnore
 	private Set<VourcherDetail> vourcherDetails;
 }
