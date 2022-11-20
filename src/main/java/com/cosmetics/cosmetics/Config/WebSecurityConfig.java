@@ -70,8 +70,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
+<<<<<<< HEAD
             .antMatchers("/auth/**","/account/**", "/api/public/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
             .antMatchers(HttpMethod.GET,"/brand/**","/type/**","/category/**","/product/**","/statistical/**","/userInformation/**").permitAll()
+=======
+            .antMatchers("/auth/**","/account/**", "/api/public/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+            .antMatchers(HttpMethod.GET,"/brand/**","/type/**","/category/**","/product/**","/userInformation/**").permitAll()
+>>>>>>> d10b72f70fe0b3a2cb34eeb88d1fa1c80d86b929
 
             .antMatchers(HttpMethod.POST,"/order/**").permitAll()
             .antMatchers(HttpMethod.POST,"/brand/**","/type/**","/category/**","/product/**").hasAuthority("admin")

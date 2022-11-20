@@ -1,10 +1,7 @@
 package com.cosmetics.cosmetics.Service.Impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,14 +18,11 @@ import com.cosmetics.cosmetics.Model.DTO.Response.ProductResponse;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Brand;
 import com.cosmetics.cosmetics.Model.Entity.Product;
-//import com.cosmetics.cosmetics.Model.Entity.Promotion;
 import com.cosmetics.cosmetics.Model.Entity.Type;
 import com.cosmetics.cosmetics.Repository.BrandRepository;
 import com.cosmetics.cosmetics.Repository.CartDetailRepository;
-import com.cosmetics.cosmetics.Repository.CartRepository;
 import com.cosmetics.cosmetics.Repository.OrderDetailRepository;
 import com.cosmetics.cosmetics.Repository.ProductRepository;
-//import com.cosmetics.cosmetics.Repository.PromotionRepository;
 import com.cosmetics.cosmetics.Repository.TypeRepository;
 import com.cosmetics.cosmetics.Service.ProductService;
 

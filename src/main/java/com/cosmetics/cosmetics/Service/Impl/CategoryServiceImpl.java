@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.cosmetics.cosmetics.Exception.ResourceAlreadyExistException;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Category;
 import com.cosmetics.cosmetics.Repository.CategoryRepository;
