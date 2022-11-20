@@ -10,11 +10,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import com.cosmetics.cosmetics.Model.Entity.Cart;
 import com.cosmetics.cosmetics.Model.Entity.CartDetail;
 import com.cosmetics.cosmetics.Model.Entity.CartKey;
-import com.cosmetics.cosmetics.Model.Entity.Product;
 
 @Repository
 public interface CartDetailRepository extends JpaRepository<CartDetail, CartKey>{

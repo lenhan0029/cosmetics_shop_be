@@ -14,7 +14,6 @@ import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;
 import com.cosmetics.cosmetics.Model.Entity.Cart;
 import com.cosmetics.cosmetics.Model.Entity.CartDetail;
-import com.cosmetics.cosmetics.Model.Entity.CartKey;
 import com.cosmetics.cosmetics.Model.Entity.Product;
 import com.cosmetics.cosmetics.Repository.AccountRepository;
 import com.cosmetics.cosmetics.Repository.CartDetailRepository;

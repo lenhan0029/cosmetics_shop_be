@@ -9,9 +9,7 @@ public interface OrderService {
 
 	ResponseEntity<?> createOrder(OrderRequest dto);
 	
-	ResponseEntity<?> getAllOrder(int statusId);//admin
-	
-	ResponseEntity<?> getListOrderByAccount(int accountId);//user
+	ResponseEntity<?> getListOrderByAccount(int accountId, String statusId, int page);//user
 	
 	ResponseEntity<?> changeOrderStatus(int orderId, ShipDTO dto);
 	

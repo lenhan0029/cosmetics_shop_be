@@ -17,6 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,25 +50,31 @@ public class Order {
     private Float total;
 	
 	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Set<OrderDetail> orderDetails;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_status")
+	@JsonIgnore
 	private Status status;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_vourcher", referencedColumnName = "id")
+	@JsonIgnore
 	private Vourcher vourcher;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_delivery_information", referencedColumnName = "id")
+	@JsonIgnore
 	private DeliveryInformation deliveryInformation;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_account")
+	@JsonIgnore
 	private Account account;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_shipper")
+	@JsonIgnore
 	private Account shipper;
 }
