@@ -15,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -70,8 +72,10 @@ public class Vourcher {
 	private Integer condition;
 	
 	@OneToOne(mappedBy = "vourcher", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Order order;
 	
 	@OneToMany(mappedBy = "vourcher", fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Set<VourcherDetail> vourcherDetails;
 }

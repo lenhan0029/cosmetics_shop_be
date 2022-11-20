@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cosmetics.cosmetics.Model.DTO.Request.ForgotPassword;
 import com.cosmetics.cosmetics.Model.DTO.Request.LoginRequest;
+import com.cosmetics.cosmetics.Model.DTO.Request.SendOTP;
 import com.cosmetics.cosmetics.Model.DTO.Request.SignupRequest;
 import com.cosmetics.cosmetics.Model.DTO.Request.VerifyRequest;
 import com.cosmetics.cosmetics.Service.AuthService;
@@ -45,5 +46,10 @@ public class AuthController {
 	@PutMapping("/forgotpassword")
 	public ResponseEntity<?> forgotPassword(@RequestBody ForgotPassword forgotPassword){
 		return authService.forgotPassword(forgotPassword);
+	}
+	
+	@PutMapping("/sendotp")
+	public ResponseEntity<?> forgotPassword(@RequestBody SendOTP otp){
+		return authService.sendOTP(otp.getEmail());
 	}
 }
