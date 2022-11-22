@@ -71,16 +71,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests()
             .antMatchers("/auth/**","/account/**", "/api/public/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-            .antMatchers(HttpMethod.GET,"/brand/**","/type/**","/category/**","/product/**","/statistical/**","/userInformation/**").permitAll()
-
-            .antMatchers(HttpMethod.POST,"/order/**").permitAll()
-            .antMatchers(HttpMethod.POST,"/brand/**","/type/**","/category/**","/product/**").hasAuthority("admin")
-            .antMatchers(HttpMethod.PUT,"/brand/**","/type/**","/category/**").hasAuthority("admin")
-            .antMatchers(HttpMethod.DELETE,"/brand/**","/type/**","/category/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.GET,"/brand/**","/type/**","/category/**","/product/**","/statistical/**","/rate/**").permitAll()
             .antMatchers(HttpMethod.GET,"/cartdetail/**").hasAuthority("member")
-            .antMatchers(HttpMethod.GET,"/order/**").hasAuthority("member")
-            .antMatchers(HttpMethod.POST,"/cartdetail/**").hasAuthority("member")
-            .antMatchers(HttpMethod.PUT,"/userInformation/**").permitAll()
+            .antMatchers(HttpMethod.POST,"/cartdetail/**","/order/**").hasAuthority("member")
+            .antMatchers(HttpMethod.PUT,"/userInformation/*","/cartdetail/**").hasAuthority("member")
+            .antMatchers(HttpMethod.DELETE,"/cartdetail/**").hasAuthority("member")
+            .antMatchers(HttpMethod.GET,"/statistical/**").hasAnyAuthority("admin")
+            .antMatchers(HttpMethod.POST,"/brand/**","/type/**","/category/**","/product/**","/vouchers/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.PUT,"/brand/**","/type/**","/category/**","/vouchers/**","/account/admin/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.DELETE,"/brand/**","/type/**","/category/**","/vouchers/**").hasAuthority("admin")
+            .antMatchers(HttpMethod.GET,"/order/**","/userInformation/**","/vouchers/**").hasAnyAuthority("admin","member")
         	.anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
