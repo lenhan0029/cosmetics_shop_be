@@ -49,7 +49,7 @@ public class AuthController {
 	}
 	
 	@PutMapping("/sendotp")
-	public ResponseEntity<?> forgotPassword(@RequestBody SendOTP otp){
+	public ResponseEntity<?> sendOtp(@RequestBody SendOTP otp){
 		return authService.sendOTP(otp.getEmail());
 	}
 }
