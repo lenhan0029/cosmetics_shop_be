@@ -200,17 +200,17 @@ public class OrderServiceImpl implements OrderService{
 					new ResponseModel("Trạng thái không hợp lệ",404));
 		}
 		Order oldOrder = order.get();
-		if(account.get().getRole().getId() == 3) {
-			if(oldOrder.getShipper() == null) {
-				oldOrder.setShipper(account.get());
-				oldOrder.setStatus(status.get());
-				oldOrder.setUpdatedDate(sqlDate);
-			}
-			oldOrder.setStatus(status.get());
-			if(status.get().getId() == 5) {
-				oldOrder.setPaidStatus(true);
-			}
-		}
+//		if(account.get().getRole().getId() == 3) {
+//			if(oldOrder.getShipper() == null) {
+//				oldOrder.setShipper(account.get());
+//				oldOrder.setStatus(status.get());
+//				oldOrder.setUpdatedDate(sqlDate);
+//			}
+//			oldOrder.setStatus(status.get());
+//			if(status.get().getId() == 5) {
+//				oldOrder.setPaidStatus(true);
+//			}
+//		}
 		if(account.get().getRole().getId() == 2) {
 			if(oldOrder.getStatus().getId() != 1 && status.get().getId() == 7) {
 				return ResponseEntity.status(HttpStatus.CONFLICT).body(

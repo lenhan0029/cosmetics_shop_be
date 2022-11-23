@@ -16,7 +16,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
 
 	List<Order> findByAccount(Account account);
 	
-	List<Order> findByShipper(Account shipper);
+//	List<Order> findByShipper(Account shipper);
 	
 	List<Order> findByStatus(Status status, Pageable page);
 	
@@ -24,7 +24,7 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
 			"o.id, o.createdDate, o.updatedDate, o.paidStatus, o.total,o.status.name,o.deliveryInformation.address) " +
 			"from Order o " +
 			"where " +
-			"o.account.id = :idaccount or o.shipper.id =:idaccount  or " +
+			"o.account.id = :idaccount or " +
 			"o.status.id in :idstatus ", nativeQuery = false)
 	Page<OrderResponse> listOrderBySearch(int idaccount, int[] idstatus, Pageable page );
 }

@@ -73,8 +73,8 @@ public class Order {
 	@JsonIgnore
 	private Account account;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_shipper")
-	@JsonIgnore
-	private Account shipper;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "id_shipper")
+//	@JsonIgnore
+//	private Account shipper;
 }
