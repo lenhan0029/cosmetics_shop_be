@@ -63,8 +63,8 @@ public class Order {
 	@JsonIgnore
 	private Vourcher vourcher;
 	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_delivery_information", referencedColumnName = "id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_delivery_information")
 	@JsonIgnore
 	private DeliveryInformation deliveryInformation;
 	
