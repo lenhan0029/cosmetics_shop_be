@@ -70,7 +70,7 @@ public class Account {
     @JsonIgnore
     private Set<Rating> ratings;
     
-    @OneToMany(mappedBy = "shipper", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private Set<Order> shipperorders;
+//    @OneToMany(mappedBy = "shipper", fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    private Set<Order> shipperorders;
 }
