@@ -1,6 +1,6 @@
 1. GET list product (permit all)
 http://localhost:8080/product
-param: name (String), brand (String), type (String), category (String), star (1 to 5), priceFrom, priceTo, page , sortType (
+param: name (String), brand (String) (truyền vào id brand dạng 1-2-3), type (int), star (1 to 5), priceFrom, priceTo, page , sortType (
 ASC or DESC), discount ( 1 or 0)
 
 response
