@@ -25,11 +25,40 @@ public interface ProductRepository extends JpaRepository<Product, Integer>{
 			"pr.id, pr.name, pr.image, pr.price, pr.star,pr.discount,pr.status, pr.type.name, pr.brand.name, pr.type.category.name) " +
 			"from Product pr " +
 			"where " +
-			"(lower(pr.name)  like  %:name% and lower(pr.brand.name)  like %:brand% and " +
-			"lower(pr.type.name)  like  %:type% and lower(pr.type.category.name)  like %:category%) " +
+			"lower(pr.name)  like  %:name% and pr.brand.id in :brand and " +
+			"pr.type.id = :type " +
 			"and pr.price between :from and :to " + "and pr.discount >= :discount " +
 			"and pr.star >= :star ", nativeQuery = false)
-	Page<ProductResponse> listProductBySearch(String name, String brand, String type, String category, Pageable page ,
+	Page<ProductResponse> listProductBySearch(String name, int[] brand, int type, Pageable page ,
 			Float star, int from, int to,int discount);
+	
+	@Query(value = "select NEW com.cosmetics.cosmetics.Model.DTO.Response.ProductResponse(" +
+			"pr.id, pr.name, pr.image, pr.price, pr.star,pr.discount,pr.status, pr.type.name, pr.brand.name, pr.type.category.name) " +
+			"from Product pr " +
+			"where " +
+			"lower(pr.name)  like  %:name% and pr.brand.id in :brand " +
+			"and pr.price between :from and :to " + "and pr.discount >= :discount " +
+			"and pr.star >= :star ", nativeQuery = false)
+	Page<ProductResponse> listProductByBrand(String name, int[] brand, Pageable page ,
+			Float star, int from, int to,int discount);
+	
+	@Query(value = "select NEW com.cosmetics.cosmetics.Model.DTO.Response.ProductResponse(" +
+			"pr.id, pr.name, pr.image, pr.price, pr.star,pr.discount,pr.status, pr.type.name, pr.brand.name, pr.type.category.name) " +
+			"from Product pr " +
+			"where " +
+			"lower(pr.name)  like  %:name% and " +
+			"pr.type.id = :type " +
+			"and pr.price between :from and :to " + "and pr.discount >= :discount " +
+			"and pr.star >= :star ", nativeQuery = false)
+	Page<ProductResponse> listProductByType(String name, int type, Pageable page ,Float star, int from, int to,int discount);
+	
+	@Query(value = "select NEW com.cosmetics.cosmetics.Model.DTO.Response.ProductResponse(" +
+			"pr.id, pr.name, pr.image, pr.price, pr.star,pr.discount,pr.status, pr.type.name, pr.brand.name, pr.type.category.name) " +
+			"from Product pr " +
+			"where " +
+			"lower(pr.name)  like  %:name% "+
+			"and pr.price between :from and :to " + "and pr.discount >= :discount " +
+			"and pr.star >= :star ", nativeQuery = false)
+	Page<ProductResponse> listProductByName(String name, Pageable page ,Float star, int from, int to,int discount);
 
 }

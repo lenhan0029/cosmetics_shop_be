@@ -78,7 +78,7 @@ public class AuthServiceImpl implements AuthService{
 	@Override
 	public ResponseEntity<?> signup(SignupRequest dto) {
 		// TODO Auto-generated method stub
-		Optional<Account> optional = accountRepository.findByUserName(dto.getUserName());
+		Optional<Account> optional = accountRepository.findByUsername(dto.getUserName());
 		if(optional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseModel(
 					"Tên đăng nhập đã tồn tại",400,dto));
@@ -121,7 +121,7 @@ public class AuthServiceImpl implements AuthService{
 		deliveryInformation.setName(dto.getFirstName() + " " + dto.getLastName());
 		deliveryInformation.setPhoneNumber(dto.getPhoneNumber());
 		deliveryInformationRepository.save(deliveryInformation);
-		return ResponseEntity.ok(new ResponseModel("Đăng ký thành công",200,newAcc));
+		return ResponseEntity.ok(new ResponseModel("Đăng ký thành công",200));
 	}
 
 	private int randomNumber(int min, int max) {
@@ -131,7 +131,7 @@ public class AuthServiceImpl implements AuthService{
 	@Override
 	public ResponseEntity<?> login(LoginRequest dto) {
 		// TODO Auto-generated method stub
-		Optional<Account> optional = accountRepository.findByUserName(dto.getUsername());
+		Optional<Account> optional = accountRepository.findByUsername(dto.getUsername());
 		if(optional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel(
 					"Tài khoản không tồn tại",404,dto));

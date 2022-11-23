@@ -1,6 +1,7 @@
 package com.cosmetics.cosmetics.Service.Impl;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import com.cosmetics.cosmetics.Model.Entity.Product;
 import com.cosmetics.cosmetics.Model.Entity.Type;
 import com.cosmetics.cosmetics.Repository.BrandRepository;
 import com.cosmetics.cosmetics.Repository.CartDetailRepository;
+import com.cosmetics.cosmetics.Repository.CategoryRepository;
 import com.cosmetics.cosmetics.Repository.OrderDetailRepository;
 import com.cosmetics.cosmetics.Repository.ProductRepository;
 import com.cosmetics.cosmetics.Repository.TypeRepository;
@@ -31,19 +33,19 @@ public class ProductServiceImpl implements ProductService{
 	private final ProductRepository productRepository;
 	private final BrandRepository brandRepository;
 	private final TypeRepository typeRepository;
-//	private final PromotionRepository promotionRepository;
+	private final CategoryRepository categoryRepository;
 	private final CartDetailRepository cartDetailRepository;
 	private final OrderDetailRepository orderDetailRepository;
 	
 	@Autowired
 	public ProductServiceImpl(ProductRepository productRepository, BrandRepository brandRepository,
-			TypeRepository typeRepository, /*PromotionRepository promotionRepository,*/
+			TypeRepository typeRepository, CategoryRepository categoryRepository,
 			CartDetailRepository cartDetailRepository, OrderDetailRepository orderDetailRepository) {
 		super();
 		this.productRepository = productRepository;
 		this.brandRepository = brandRepository;
 		this.typeRepository = typeRepository;
-//		this.promotionRepository = promotionRepository;
+		this.categoryRepository = categoryRepository;
 		this.cartDetailRepository = cartDetailRepository;
 		this.orderDetailRepository = orderDetailRepository;
 	}
@@ -51,38 +53,26 @@ public class ProductServiceImpl implements ProductService{
 
 	@Override
 
-	public ResponseEntity<?> getProductBySearch(String name, String brand, String type, String category, Float star,
+	public ResponseEntity<?> getProductBySearch(String name, String brand, int type, Float star,
 			int from, int to, String sortType,int page,int discount) {
-//		int[] starArr = new int[]{0,0,0,0,0};
-//		if(star == 0) {
-//			for(int i = 0; i < 5; i++) {
-//				starArr[i] = i+1;
-//			}
-//		}else if(star < 9) {
-//			starArr[0] = star;
-//		}else {
-//			int temp;
-//			for(int i = 0; i < 5; i++) {
-//				starArr[i] = star%10;
-//				temp = star/10;
-//				star = temp;
-//				if(star < 0) {
-//					break;
-//				}
-//			}
-//		}
-
-		
-		
+		String[] arr_brand = brand.split("-");
+		int[] listbrand = Stream.of(arr_brand).mapToInt(Integer::parseInt).toArray();
 		if(to == 0) {
 			to = productRepository.findMaxPrice();
 		}
 		Pageable newPage = createPage(page,sortType);
-
-		Page<ProductResponse> pageProduct= this.productRepository.
-				listProductBySearch(name.toLowerCase(),brand.toLowerCase(),type.toLowerCase(),category.toLowerCase(),
-						newPage, star, from, to,discount);
-
+		Page<ProductResponse> pageProduct = this.productRepository.
+				listProductByName(name.toLowerCase(),newPage, star, from, to,discount);
+		if(!brand.equals("0") && type!=0 ) {
+			pageProduct= this.productRepository.listProductBySearch(name.toLowerCase(),listbrand,type,
+							newPage, star, from, to,discount);
+		}else if(brand.equals("0") && type!=0) {
+			pageProduct= this.productRepository.listProductByType(name.toLowerCase(),type,
+							newPage, star, from, to,discount);
+		}else if(!brand.equals("0") && type == 0) {
+			pageProduct= this.productRepository.listProductByBrand(name.toLowerCase(),listbrand,
+							newPage, star, from, to,discount);
+		}
 		if (pageProduct.hasContent())
 		{
 			return ResponseEntity.ok(new ResponseModel("thành công",200,pageProduct));
