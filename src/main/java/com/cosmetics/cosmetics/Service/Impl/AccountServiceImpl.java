@@ -1,7 +1,14 @@
 package com.cosmetics.cosmetics.Service.Impl;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Optional;
+import java.util.stream.Stream;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -11,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.cosmetics.cosmetics.Exception.ResourceNotFoundException;
 import com.cosmetics.cosmetics.Model.DTO.Request.ChangePasswordRequest;
 import com.cosmetics.cosmetics.Model.DTO.Request.EditAccountRequest;
+import com.cosmetics.cosmetics.Model.DTO.Response.AccountResponse;
 import com.cosmetics.cosmetics.Model.DTO.Response.ResponseModel;
 import com.cosmetics.cosmetics.Model.Entity.Account;
 import com.cosmetics.cosmetics.Model.Entity.Role;
@@ -50,11 +58,65 @@ public class AccountServiceImpl implements AccountService{
 	}
 
 	@Override
-	public ResponseEntity<?> getListAccount(String searchCode, Integer roleId, boolean status, String sort) {
+	public ResponseEntity<?> getListAccount(String searchCode, String roleId, String status, String sort, int page) {
 		// TODO Auto-generated method stub
-		return null;
+		String[] arr_roles = roleId.split("");
+		for (String string : arr_roles) {
+			String[] arr = {"1","2","3"};
+			if(!Arrays.asList(arr).contains(string)) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+						new ResponseModel("Quyền không tồn tại",404));
+			}
+		}
+		String[] arr_status = status.split("");
+		for (String string : arr_status) {
+			String[] arr = {"0","1"};
+			if(!Arrays.asList(arr).contains(string)) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+						new ResponseModel("Trạng thái không tồn tại",404));
+			}
+		}
+		int[] role = Stream.of(arr_roles).mapToInt(Integer::parseInt).toArray();
+		boolean[] arrstatus = convert(arr_status);
+		Pageable newPage = createPage(page,sort);
+		Page<AccountResponse> pageAccount = accountRepository.listAccountBySearch(searchCode, role, arrstatus, newPage);
+		if (pageAccount.hasContent())
+		{
+			return ResponseEntity.ok(new ResponseModel("thành công",200,pageAccount));
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseModel("không tồn tại tài khoản",404));
 	}
 
+	public Pageable createPage(int page, String sortType){
+
+		String sType = sortType.toUpperCase();
+		Sort sort;
+
+		switch (sType){
+			case "ASC":
+				sort = Sort.by(Sort.Direction.ASC, "username");
+				break;
+			case "DESC":
+				sort = Sort.by(Sort.Direction.DESC, "username");
+				break;
+			default:
+				throw new ResourceNotFoundException("NO MODE SORT FOUND !");
+		}
+
+		return PageRequest.of(page,12,sort);
+
+	}
+	public boolean[] convert(String[] bool) {
+		boolean[] boolArray = new boolean[bool.length];
+		for (int i = 0; i < boolArray.length; i++) {
+			if(bool[i].equals("0")) {
+				boolArray[i]=false;
+			}else {
+				boolArray[i]=true;
+			}
+		}
+		return boolArray;
+	}
 	@Override
 	public ResponseEntity<?> editAccount(Integer id, EditAccountRequest dto) {
 		// TODO Auto-generated method stub

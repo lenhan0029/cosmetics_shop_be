@@ -28,9 +28,8 @@ public class ProductController {
 	@GetMapping
 	public ResponseEntity<?> listProductBySearch(
 			@RequestParam(name = "name",defaultValue = "%", required = false) String name,
-			@RequestParam(name = "brand",defaultValue = "%", required = false) String brand,
-			@RequestParam(name = "type",defaultValue = "%", required = false) String type,
-			@RequestParam(name = "category",defaultValue = "%", required = false) String category,
+			@RequestParam(name = "brand",defaultValue = "0", required = false) String brand,
+			@RequestParam(name = "type",defaultValue = "0", required = false) int type,
             @RequestParam(name = "star", defaultValue = "0", required = false) String star,
             @RequestParam(name = "priceFrom", defaultValue = "0", required = false) String from,
             @RequestParam(name = "priceTo", defaultValue = "0", required = false) String to,
@@ -43,7 +42,7 @@ public class ProductController {
 		int priceTo = Integer.parseInt(to);
 		int pageConverted = Integer.parseInt(page);
 		int discountConverted = Integer.parseInt(discount);
-		return productService.getProductBySearch(name, brand, type, category, starConverted, priceFrom, priceTo, sortType, pageConverted,discountConverted);
+		return productService.getProductBySearch(name, brand, type, starConverted, priceFrom, priceTo, sortType, pageConverted,discountConverted);
 		
 	}
 	

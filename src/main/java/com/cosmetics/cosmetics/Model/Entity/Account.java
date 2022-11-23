@@ -8,6 +8,8 @@ import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +25,7 @@ public class Account {
 
     @Column(name = "username")
     @NotEmpty(message = "cannot generate username")
-    private String userName;
+    private String username;
 
     @Column(name = "password")
     @NotEmpty(message = "cannot generate password")
@@ -40,27 +42,35 @@ public class Account {
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_role", referencedColumnName = "id")
+    @JsonIgnore
 	private Role role;
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_information", referencedColumnName = "id")
+    @JsonIgnore
     private UserInformation userInformation;
     
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<DeliveryInformation> deliveryInformations;
     
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Order> orders;
     
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<VourcherDetail> vourcherDetails;
     
     @OneToOne(mappedBy = "account", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Cart cart;
     
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Rating> ratings;
     
     @OneToMany(mappedBy = "shipper", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Order> shipperorders;
 }
