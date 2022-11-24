@@ -164,7 +164,7 @@ public class OrderServiceImpl implements OrderService{
 			}
 		}
 		int[] status = Stream.of(temp).mapToInt(Integer::parseInt).toArray();
-		Pageable pageItems = PageRequest.of(page, 12,Sort.by("createdDate"));
+		Pageable pageItems = PageRequest.of(page, 12,Sort.by(Sort.Direction.DESC,"createdDate"));
 		Optional<Account> account = accountRepository.findById(accountId);
 		if(accountId != 0 && account.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
