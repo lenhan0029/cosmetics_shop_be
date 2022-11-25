@@ -1,5 +1,7 @@
 package com.cosmetics.cosmetics.Model.Entity;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
@@ -35,8 +38,8 @@ public class Role {
     @NotEmpty(message = "cannot generate name")
     private String name;
 	
-	@OneToOne(mappedBy = "role", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
 	@JsonIgnore
-	private Account account;
+	private Set<Account> account;
 	
 }
