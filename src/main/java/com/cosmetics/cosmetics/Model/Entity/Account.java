@@ -40,7 +40,7 @@ public class Account {
     @Column(name = "create_time")
     private Timestamp createTime;
     
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_role", referencedColumnName = "id")
     @JsonIgnore
 	private Role role;
@@ -70,7 +70,7 @@ public class Account {
     @JsonIgnore
     private Set<Rating> ratings;
     
-//    @OneToMany(mappedBy = "shipper", fetch = FetchType.LAZY)
-//    @JsonIgnore
-//    private Set<Order> shipperorders;
+    @OneToMany(mappedBy = "shipper", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Order> shipperorders;
 }
