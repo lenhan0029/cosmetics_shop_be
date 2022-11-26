@@ -27,4 +27,11 @@ public interface OrderRepository extends JpaRepository<Order, Integer>{
 			"(o.account.id = :idaccount or o.shipper.id = :idaccount) and " +
 			"o.status.id in :idstatus ", nativeQuery = false)
 	Page<OrderResponse> listOrderBySearch(int idaccount, int[] idstatus, Pageable page );
+	
+	@Query(value = "select NEW com.cosmetics.cosmetics.Model.DTO.Response.OrderResponse(" +
+			"o.id, o.createdDate, o.updatedDate, o.paidStatus, o.total,o.status.name,o.deliveryInformation.address) " +
+			"from Order o " +
+			"where " +
+			"o.status.id in :idstatus ", nativeQuery = false)
+	Page<OrderResponse> listOrderByStatus(int[] idstatus, Pageable page );
 }
